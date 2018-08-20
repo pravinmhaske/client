@@ -1,0 +1,210 @@
+<ion-header >
+    <div id="flipkart-navbar">
+        <div class="row">
+            <div class="col-md-1" *ngIf="!isMobile">
+                <img src="../assets/img/logo/logo.png"
+                height="30px" width="100%" style="margin-top: 7px;"/>
+            </div>
+            <div class="col-md-5 col-sm-12 col-xs-12 row2" *ngIf="isMobile">
+                <ion-navbar>
+                    <ion-title>Product Details</ion-title>
+                </ion-navbar>
+            </div>
+            <div class="col-md-7 row1" *ngIf="!isMobile">
+                <ul class="largenav pull-left" *ngFor="let item of appMenuItems">
+                    <li class="upper-links" *ngIf="((item.title==='Logout') && isUserLoggedIn)">
+                        <a class="links" (click)="openPage(item)"><ion-icon item-left [name]="item.icon" style="margin-right: 5px;"></ion-icon>{{item.title}}</a>
+                    </li>
+                    <li class="upper-links" *ngIf="(((item.title==='My Profile')) && isUserLoggedIn && isSeller)">
+                        <a class="links" (click)="openPage(item)"><ion-icon item-left [name]="item.icon" style="margin-right: 5px;"></ion-icon>{{item.title}}</a>
+                    </li>
+                    <li class="upper-links" *ngIf="(item.title!=='Logout' && item.title!=='Wish list' && item.title!=='Login'  && item.title!=='My Profile' && item.title!=='My Products')">
+                        <a class="links" (click)="openPage(item)"><ion-icon item-left [name]="item.icon" style="margin-right: 5px;"></ion-icon>{{item.title}}</a>
+                    </li>
+                    <li class="upper-links" *ngIf="(item.title==='Wish list' && !isSeller)">
+                        <a class="links" (click)="openPage(item)"><ion-icon item-left [name]="item.icon" style="margin-right: 5px;"></ion-icon>{{item.title}}</a>
+                    </li>
+                    <li class="upper-links" *ngIf="(item.title==='Login' && !isUserLoggedIn)">
+                        <a class="links" (click)="openPage(item,$event)"><ion-icon item-left [name]="item.icon" style="margin-right: 5px;"></ion-icon>{{item.title}}</a>
+                    </li>
+                    <li class="upper-links" *ngIf="(((item.title==='My Products'|| item.title==='Seller Page')) && isUserLoggedIn && isSeller)">
+                        <a class="links" (click)="openPage(item)"><ion-icon item-left [name]="item.icon" style="margin-right: 5px;"></ion-icon>{{item.title}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</ion-header>
+<ion-content class="broker">
+    <!--<div class="col-sm-12 col-xs-12 col-md-6 col-md-6">
+        <img [src]="product.img" height="250px" class="product-img" />
+    </div>-->
+    <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12" *ngIf="product">
+
+        <div class="col-sm-12 col-xs-12 col-md-4 col-lg-4  image-block">
+                <!-- <div class="card col-sm-12 col-xs-12 col-md-4 col-lg-4 fixed-height image-block"> -->
+            <img  class="img-rounded img-thumbnail" style="margin-top:15px;" [src]="product.imgurl" />
+            <div (click)="addToFav()" class="add-fav">
+                <ion-icon name="heart"></ion-icon>
+            </div>
+        </div>
+        <div class="col-sm-12 col-xs-12 col-md-8 col-lg-8 product-feature">
+          <div class="card col-md-6 col-lg-6 col-xs-12 col-sm-12">
+                <!-- <div class="card col-md-6 col-lg-6 col-xs-12 col-sm-12 fixed-height"> -->
+            <div class="section1">
+                <header class="product-detail-name">Product Details</header>
+                <div style="font-size: 0.85em">{{product.category}} > {{product.subcategory}} > {{product.brandname}}</div>
+                <div style="font-size: 1.5em;padding:5px 0">{{product.name |titleCase}}</div>
+                <div>
+                    <div class="prod-rating" *ngIf="product?.rating">
+                        <span>{{getRatingCount(product.rating)}}</span>
+                        <ion-icon name="star"></ion-icon>
+                    </div>
+                   
+                    <!-- <span *ngIf="product?.rating">({{product.rating ? product.rating.split(',').length : 0}})</span> -->
+                </div>
+                <!-- <div *ngIf="product.likes">
+                    <span>{{product?.likes ? product.likes.split(',').length : 0}} consumers liked this product</span>
+                </div> -->
+                <div class="product-details-text">
+                    <div>
+                        <span class="bold">M.R.P. : </span>
+                        <span class="offer actual-price">&#8377; {{product.originalprice}}</span>
+                    </div>
+                    <div>
+                        <span class="bold" *ngIf="!product.offer || !product.offer>0">Final Price: </span>
+                        <span class="bold" *ngIf="product.offer&&product.offer>0">Discounted Price: </span>
+                        <span class="display-prod">&#8377;{{product.finalprice}}</span>
+                        <span class="offer">{{product.offer}}% off</span>
+                    </div>
+                </div>
+                <hr style="margin: 0 0 10px;">
+                <div class="product-details-text" *ngIf="product.is_home_delivery">Home Delivery within {{product.home_delivery_range}}KMs</div>
+                <div class="product-details-text" *ngIf="!product.is_home_delivery">Home delivery not available</div>
+                <div  class="product-details-text" style="margin-bottom: 5px;" *ngIf="product.outlets">
+                    <span>By </span>
+                    <a (click)="showSellerDetails(product.seller.id)" style="font-weight: bold; font-size: 1.15em;">{{product.seller.shopname |titleCase}} </a> and Available at below address/s.
+                    <div class="all-outlets">
+                        <div *ngFor="let outlet of product.outlets">
+                            <span> <i class="glyphicon glyphicon-map-marker"> </i> 
+                                {{outlet.address}}</span>
+                        </div>
+                    </div>
+                    <!-- <span *ngFor="let outlet of getUniqueOutletZip(product.outlets); let i=index" style="font-weight: 400;">
+                        <span *ngIf="i<=3 && i!=getUniqueOutletZip(product.outlets).length-1">{{outlet}}, </span>
+                        <span *ngIf="i==getUniqueOutletZip(product.outlets).length-1">and {{outlet}}</span>
+                        <span *ngIf="i>3">more...</span>
+                    </span> -->
+                </div>
+
+                <!-- <angular2-multiselect required [data]="product.outlets" [(ngModel)]="product.outlets" [ngModelOptions]="{standalone: true}" [settings]="dropdownSettings"></angular2-multiselect> -->
+                <!-- <div>Product added on {{product.updated_time | date}}</div> -->
+                <div *ngIf="product.is_home_delivery">Home delivery in {{product.home_delivery_range}}km range</div>
+                <!--</div>-->
+            </div>
+          </div>
+          <div class="card col-md-6 col-xs-12 col-lg-6 col-sm-12fixed-height">
+
+            <!-- Detalles especificos del producto -->
+            <div class="section1">
+                <header class="product-detail-name">Specifications</header>
+                <div *ngIf="product.brandname" class="col-md-12 col-lg-12 col-xs-12 col-sm-12 border-between no-pad">
+                    <label class="col-md-4 col-lg-4 col-xs-4 col-sm-4 top-pad left-aligned">BRAND</label>
+                    <div class="col-md-8 col-lg-8 col-xs-8 col-sm-8 top-pad left-aligned">{{product.brandname |titleCase}}</div>
+                </div>
+                <div *ngFor="let specObj of product.specifications" class="col-md-12 col-lg-12 border-between no-pad">
+                    <label class="col-md-4 col-lg-4 col-xs-4 col-sm-4 top-pad left-aligned">{{specObj.name | uppercase}}</label>
+                    <div class="col-md-8 col-lg-8 col-xs-8 col-sm-8 top-pad left-aligned">
+                        <span *ngFor="let value of specObj.value">
+                            <span *ngIf ="specObj.name != 'Color'" class="spec-value">{{value.val |titleCase}}</span>
+                            <span *ngIf="specObj.name=='Color'" [ngStyle]="{'background-color':value.val}" class="spec-color"></span>
+                        </span>
+                        <span *ngIf="!specObj.value.length">NA</span>
+                    </div>
+                </div>
+                <div *ngIf="product.otherspecification" class="col-md-12 col-lg-12 border-between no-pad">
+                    <label class="col-md-4 col-lg-4 col-xs-4 col-sm-4 top-pad left-aligned">Other specifications</label>
+                    <div class="col-md-8 col-lg-8 col-xs-8 col-sm-8 top-pad left-aligned">{{product.otherspecifications}}</div>
+                </div>
+                <!--</div>-->
+            </div>
+          </div>
+        </div>
+        <!--<div class="desktop-only">
+            <header class="product-detail-name bold">{{product.prod_name}}</header>
+            <div *ngIf="product.rating">
+                <div class="rating-block">
+                    <span>{{getProductAvgRate(product.rating)}}</span>
+                    <i class="fa fa-star gold"></i>
+                </div>
+                <div class="review-block bold">{{product.rating.split(',').length}} Ratings</div>
+            </div>
+            <div>
+                <div><span>Special Price: </span><span class="display-prod">{{product.price}}/-</span>
+                    <span *ngIf="product.offer&&product.offer>0">{{product.offer}}</span></div>
+            </div>
+            <div style="margin-bottom: 5px;" *ngIf="product.outlets">
+                <span>by </span>
+                <a (click)="showSellerDetails(product.shopid)" style="font-weight: bold; font-size: 1.15em;">{{product.shopname}} at </a>
+                <span *ngFor="let outlet of getUniqueOutletZip(product.outlets); let i=index" style="font-weight: 400;">
+          <span *ngIf="i<=3 && i!=getUniqueOutletZip(product.outlets).length-1">{{outlet}}, </span>
+                <span *ngIf="i==getUniqueOutletZip(product.outlets).length-1">and {{outlet}}</span>
+                <span *ngIf="i>3">more...</span>
+                </span>
+
+            </div>
+            <div *ngIf="product.showNumber" style="margin-bottom: 15px;">You can contact seller on- {{product.shopPhone}}</div>
+            <div *ngFor="let specObj of product.specifications" class="col-md-12 col-lg-12 border-between no-pad">
+                <label class="col-md-4 col-lg-4 top-pad left-aligned">{{specObj.name}}</label>
+                <div class="col-md-8 col-lg-8 top-pad left-aligned">
+                    <span *ngFor="let value of specObj.values">
+            <span *ngIf ="specObj.name != 'Color'" class="spec-value">{{value}}</span>
+                    <span *ngIf="specObj.name=='Color'" [ngStyle]="{'background-color':value}" class="spec-color"></span>
+                    </span>
+                </div>
+            </div>
+        </div>-->
+    </div>
+    <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12" *ngIf="similarProducts && similarProducts.length">
+        <div class="similar-product-title bold" style="margin-top: 10px;">You might also like</div>
+        <div class="desktop-view">
+            <ion-slides slides slidesPerView="6" #mySlider>
+                <ion-slide *ngFor="let item of similarProducts">
+                    <div>
+                      <a href="#">
+                        <img src="{{item.imgurl}}" (click)="openProductDetails(item)" class="img-rounded img-thumbnail"
+                        style="height: 35vh;width:100%;" alt="Product Image" />
+                      </a>
+                    </div>
+                    <div style="font-size: 0.8em;">{{item.name}}</div>
+                    <div class="separator clear-left">
+                        <p class="btn-add" style="font-size: 0.75em;">
+                            <a (click)="showSellerDetails(item.seller.id)" href="#" class="hidden-sm">By {{item.shopname |titleCase
+                            }}</a>
+                            <span>&#8377;{{item.finalprice}}</span>
+                        </p>
+                    </div>
+                </ion-slide>
+            </ion-slides>
+        </div>
+        <div class="mobile-only">
+            <ion-slides slides slidesPerView="3" #mySlider>
+                <ion-slide *ngFor="let item of similarProducts">
+                    <div>
+                        <a href="#">
+                <img src="{{item.img}}" (click)="openProductDetails(item)" class="compressed-img img-rounded img-thumbnail"
+                style="height:75%;width:100%;" alt="Product Image" />
+              </a>
+                    </div>
+                    <div style="font-size: 0.8em;">{{item.name |titleCase}}</div>
+                    <div class="separator clear-left">
+                        <p class="btn-add" style="font-size: 0.75em;">
+                            <a (click)="showSellerDetails(item.seller.id)" href="#" class="hidden-sm">By {{item.shopname |titleCase}}</a>
+                            <span>&#8377;{{item.finalprice}}</span>
+                        </p>
+                    </div>
+                </ion-slide>
+            </ion-slides>
+        </div>
+    </div>
+</ion-content>

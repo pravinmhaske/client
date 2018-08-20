@@ -1,0 +1,345 @@
+<!-- <ion-header desktop-only  class="deskContent"> -->
+<ion-header>
+  <div id="flipkart-navbar">
+    <div class="row">
+      <div class="col-md-1" *ngIf="!isMobile">
+        <img src="../assets/img/logo/logo.png" height="30px" width="100%" style="margin-top: 7px;" />
+      </div>
+      <div class="col-md-4 col-sm-12 col-xs-12 row2" *ngIf="isMobile">
+        <ion-navbar style="min-height: 44px;">
+          <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+          </button>
+          <ion-searchbar [(ngModel)]="query" placeholder="Search your Interest"></ion-searchbar>
+        </ion-navbar>
+      </div>
+      <div class="col-md-7" style="padding-top: 11px" *ngIf="!isMobile">
+        <ul class="largenav pull-left" *ngFor="let item of appMenuItems">
+          <li class="upper-links" *ngIf="((item.title==='Logout') && isUserLoggedIn)">
+            <a class="links" (click)="openPage(item)">
+              <ion-icon item-left [name]="item.icon"></ion-icon>{{item.title}}</a>
+          </li>
+          <li class="upper-links" *ngIf="(((item.title==='My Profile')) && isUserLoggedIn && isSeller)">
+            <a class="links" (click)="openPage(item)">
+              <ion-icon item-left [name]="item.icon"></ion-icon>{{item.title}}</a>
+          </li>
+          <li class="upper-links" *ngIf="(item.title!=='Logout' && item.title!=='Wish list' && item.title!=='Login'  && item.title!=='My Profile' && item.title!=='My Products')">
+            <a class="links" (click)="openPage(item)">
+              <ion-icon item-left [name]="item.icon"></ion-icon>{{item.title}}</a>
+          </li>
+          <li class="upper-links" *ngIf="(item.title==='Wish list' && !isSeller)">
+            <a class="links" (click)="openPage(item)">
+              <ion-icon item-left [name]="item.icon"></ion-icon>{{item.title}}</a>
+          </li>
+          <li class="upper-links" *ngIf="(item.title==='Login' && !isUserLoggedIn)">
+            <a class="links" (click)="openPage(item,$event)">
+              <ion-icon item-left [name]="item.icon"></ion-icon>{{item.title}}</a>
+          </li>
+          <li class="upper-links" *ngIf="(((item.title==='My Products'|| item.title==='Seller Page')) && isUserLoggedIn && isSeller)">
+            <a class="links" (click)="openPage(item)">
+              <ion-icon item-left [name]="item.icon"></ion-icon>{{item.title}}</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-4 col-sm-12 col-xs-12 row2" *ngIf="!isMobile">
+        <ion-searchbar [(ngModel)]="query" placeholder="Search your Interest"></ion-searchbar>
+      </div>
+    </div>
+  </div>
+</ion-header>
+<ion-content class="product-container col-xs-12 col-lg-12 col-sm-12 col-md-12">
+  <div class="col-md-2 col-lg-2 desktop-only" style="padding-right: 0;">
+    <div *ngIf="!filterApplied" style="padding: 5px;">
+      <div *ngFor="let groups of categories;let i = index" class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div id='filter-panel' class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingTwo">
+            <h4 class="panel-title">
+              <a [ngClass]="{'collapsed': (i!==0)}" class="" data-toggle="collapse" data-parent="#accordion" href="#_groups_collapseTwo{{i}}"
+                aria-expanded="false" aria-controls="collapseTwo"> {{groups.groupname}} </a>
+            </h4>
+          </div>
+          <div id="_groups_collapseTwo{{i}}" [ngClass]="{'in': (i===0)}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+            <div class="panel-body">
+              <!--<div *ngIf="groups.showGroupCategories">-->
+              <div *ngFor="let categoryObj of groups.categories" class="filter-nav" (click)="onCategorySelected(categoryObj)">
+                <span class="glyphicon glyphicon-menu-right"></span>
+                {{categoryObj.catname}}
+              </div>
+              <!--</div>-->
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="filterApplied" style="padding: 5px;">
+      <div>
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="subcategories">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  Sub categories </a>
+              </h4>
+
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="subcategories">
+              <div class="panel-body" style="padding: 10px 5px;">
+                <button type="button" (click)="getProducts()" class="btn btn-default btn-xs bg-color">
+                  Back
+                  <i class="fa fa-reply" aria-hidden="true"></i>
+                </button>
+                <div *ngFor="let selectedSubcat of showSubcategories" class="filter-nav">
+                  <!-- <span class="glyphicon glyphicon-menu-right"></span> {{categoryObj.catName}} -->
+                  <div *ngIf="selectedSubcat.name != productType.subcatName" (click)="selectSubcategories(selectedSubcat)" class="subcategory-selection">
+                    <span class="glyphicon glyphicon-menu-right"></span>{{selectedSubcat.name}}
+                  </div>
+                  <div *ngIf="selectedSubcat.name == productType.subcatName" (click)="selectSubcategories(selectedSubcat)" class="subcategory-selection"
+                    style="font-size: 1.15em;font-weight: bold;">
+                    <span class="glyphicon glyphicon-menu-down"></span>{{selectedSubcat.name}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="specifications">
+              <h4 class="panel-title">
+                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  Specifications </a>
+              </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="specifications">
+              <!-- sellerspage-ellipsis -->
+
+              <div class="panel-body" style="padding: 10px 5px;">
+                <div style="display: flex; justify-content: space-between;">
+                  <button class=" pull-left pagebgcolor btn-secondary float-right btn-xs" (click)="applyFilter()">Apply filter</button>
+                  <button type="button" (click)="clearFilters()" class="btn btn-default btn-xs bg-color">
+                    Clear
+                    <ion-icon name="refresh"></ion-icon>
+                  </button>
+                </div>
+                <!-- <page-filter-modal></page-filter-modal> -->
+                <div *ngIf="filterOptions">
+                  <div *ngFor="let filterOption of filterOptions">
+                    <div (click)="filterOption.hide = !filterOption.hide ? true : false" class="cat-filter-label">
+                      <label>{{filterOption.name}}</label>
+                      <span class="glyphicon glyphicon-menu-up" *ngIf="filterOption.show"></span>
+                      <span class="glyphicon glyphicon-menu-down" *ngIf="!filterOption.show"></span>
+                    </div>
+                    <div [hidden]="filterOption.hide">
+                      <div *ngFor="let option of filterOption.value" class="cat-filter-options">
+                        <div *ngIf="filterOption.type === 'color'" class="filter-item-color" (click)="addProductFilters($event); option.isselected=!option.isselected"
+                          [style.background-color]="option.val">
+                        </div>
+                        <div *ngIf="filterOption.type === 'checkbox' || filterOption.type == 'radio'" class="filter-item-checkbox" (click)="addProductFilters($event); option.isselected=!option.isselected">
+                          <span *ngIf="filterOption.type != 'color'">{{option.val}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <button class=" pull-left pagebgcolor btn-secondary float-right btn-xs" (click)="applyFilter()">Apply filter</button>
+                  <button type="button" (click)="clearFilters()" class="btn btn-default btn-xs bg-color">
+                    Clear
+                    <ion-icon name="refresh"></ion-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+
+  <div class="col-xs-12 col-md-10 col-lg-10">
+    <div class="row">
+      <div class="col-xs-12 col-md-12 col-lg-12">
+        <div class="tabbable-panel" style="position: absolute; width: 100%;">
+          <div class="tabbable-line">
+            <ul class="nav nav-tabs desktop-only">
+              <li class="active" (click)="sortBy('newest')">
+                <a data-toggle="tab"> Newest
+                  <ion-icon ios="ios-bookmark" md="md-bookmark"></ion-icon>
+                </a>
+              </li>
+              <li (click)="sortBy('high2low')">
+                <a data-toggle="tab">
+                  Price
+                  <ion-icon ios="ios-arrow-round-down" md="md-arrow-round-down"></ion-icon>
+                </a>
+              </li>
+              <li (click)="sortBy('low2high')">
+                <a data-toggle="tab">
+                  Price
+                  <ion-icon ios="ios-arrow-round-up" md="md-arrow-round-up"></ion-icon>
+                </a>
+              </li>
+              <li (click)="sortBy('offer')">
+                <a data-toggle="tab">
+                  Offers
+                  <ion-icon ios="ios-bookmark" md="md-bookmark"></ion-icon>
+                </a>
+              </li>
+              <li (click)="sortBy('popular')">
+                <a data-toggle="tab">
+                  Popularity
+                  <ion-icon name="heart" style="margin-left:2px;color:red;"></ion-icon>
+                </a>
+              </li>
+              <span class="prod-warning" *ngIf="!isMobile">
+                ** Click on the Product image to open Product details
+              </span>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane active" id="products_filter_tab_default_1">
+                <div class="row itemsBlock">
+                  <div *ngFor="let product of products | search:'name,seller?.shopname,brandname':query" class="col-md-3 col-xs-6 col-sm-6 col-12 product">
+                    <div class="photo">
+                      <a href="javascript:void(0)">
+                        <img *ngIf="isMobile" src="{{product.imgurl}}" (click)="openProductDetails(product)" class="img-rounded img-thumbnail" style="height: 200px; width: 100%; padding: 0;"
+                          alt="Product Image" />
+                        <img *ngIf="!isMobile" src="{{product.imgurl}}" title="click for more details." (click)="openProductDetails(product)" class="img-rounded img-thumbnail"
+                          style="height: 275px; width: 100%; padding: 0;" alt="Product Image" />
+                      </a>
+                    </div>
+                    <div (click)="addToFav(product.prodid)" class="add-fav">
+                      <ion-icon name="heart"></ion-icon>
+                    </div>
+                    <div class="card-block">
+                      <div class="profile photo" *ngIf="!isMobile">
+                        <!-- <ion-item>
+															<ion-checkbox [(ngModel)]="pepperoni"></ion-checkbox>
+														  </ion-item> -->
+                        <input type="checkbox" (click)="addToCompare(product, $event)" />
+                        <!-- <input type="checkbox" (click)="addToCompare(product.prodid, $event)" style="zoom: 1.5;" /> -->
+
+                      </div>
+                      <div *ngIf="!isMobile" class="float-left compare-info">
+                        <tooltip-content #compareInfo placement="top">
+
+                          <div class="text-left">Compare products.</div>
+                          <div class="text-left">Maximum four.</div>
+                        </tooltip-content>
+                        <a href="#" class="remove-decoration">
+                          <i [tooltip]="compareInfo" class="glyphicon glyphicon-info-sign"></i>
+                        </a>
+                      </div>
+
+
+                      <!-- <h5 (click)="showSellerDetails(product.shopid)"  class="sellerspage-ellipsis pull-left float-right margin-zero"><a href="#"  [tooltip]="sellerInfo1"> {{product.seller.shopname | titleCase}}</a></h5> -->
+
+                      <div class="meta inline-block pull-right" style="margin-top: -10px;">
+                        <span>&#8377; {{product.finalprice}}
+                          <h6 class="inline-block">
+                            <span style="text-decoration: line-through; color: gray">&#8377;{{product.originalprice}}</span>
+                            <span>{{product.offer}}% off</span>
+                          </h6>
+                        </span>
+
+
+                      </div>
+                      <h5 class='inline-block productname-ellipsis margin-zero' title={{product.prod_name}}>{{product.name | titleCase}}
+                      </h5>
+                      <div>
+                        <div (click)='rateProduct()' class="prod-rating float-left" *ngIf="product.rating">
+                          <span>{{getRatingCount(product.rating)}}</span>
+                          <ion-icon name="star"></ion-icon>
+                        </div>
+                        ({{product.ratingby.length}})
+
+                        <div class="prod-rating float-right" (click)="likeProductClick(product)" *ngIf="product.rating">
+                          <span>{{product.likes.length}}</span>
+                          <ion-icon ios="ios-thumbs-up" md="md-thumbs-up"></ion-icon>
+                        </div>
+                      </div>
+                      <div class="card-text margin-zero">
+
+                        <div class="inline-block" class="product-name-container">
+                          <h5 title="click for seller information." (click)="showSellerDetails(product.seller.id)" class="sellerspage-ellipsis pull-left float-right margin-zero">
+                            <a href="javascript:void(0)"> {{product.seller.shopname | titleCase}}</a>
+                          </h5>
+
+                        </div>
+
+                        <!-- <ion-list> <ion-item>
+															<ion-checkbox ></ion-checkbox>
+														  </ion-item>
+														
+														</ion-list> -->
+                        <div>
+                          <p>
+                            <a class="remove-decoration">
+                              <i class="glyphicon glyphicon-phone"></i>{{product.outlets[0]?.contactnumber}}
+                            </a>
+                            <a href="#" *ngIf='(loggedInUserDetails.shopId==product.seller.id)' (click)="editProduct(product)" 
+                            class="remove-decoration float-right">
+                             Edit<i class="glyphicon glyphicon-info-sign"></i>
+                           </a> 
+                            <a (click)="openProductDetails(product)" href="javascript:void(0)" class="remove-decoration float-right">
+                              <i class="glyphicon glyphicon-bell"></i>AVAILABLE AT ({{product.outlets.length}})
+                            </a>
+                            <!-- <tooltip-content #editProduct placement="right">
+																<div class="text-left">Edit product.</div>
+	
+															</tooltip-content>
+														-->
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                  <span class="no-product" *ngIf="!products || products.length == 0">
+                    <ion-icon ios="ios-alert" md="md-alert"></ion-icon> No Products found</span>
+                </div>
+
+
+              </div>
+              <pagination *ngIf="products && paginationModelTotCount>16" (onPaginationItemClicked)="onPaginationItemClicked($event)" [totalItems]="paginationModelTotCount"></pagination>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ion-content>
+<div class="desktop-only compare-box" *ngIf="compareList.length > 0" (click)="compareProducts()">Compare {{compareList.length}}</div>
+<ion-nav #content swipeBackEnabled="false"></ion-nav>
+<ion-footer align-title="left" class="bar-positive expand-footer col-sm-12 col-xs-12">
+  <ion-row class="footer-row" *ngIf="!filterApplied">
+    <ion-col *ngFor="let group of categories" (click)="selectCatGroup(group)">
+      <ion-icon *ngIf="group.groupname==='Style'" name="cart"></ion-icon>
+      <ion-icon *ngIf="group.groupname==='Electronics'" name="easel"></ion-icon>
+      <ion-icon *ngIf="group.groupname==='Home'" name="home"></ion-icon>
+      <ion-icon *ngIf="group.groupname==='Sports'" name="ios-game-controller-b"></ion-icon>
+      <ion-icon *ngIf="group.groupname==='Food'" name="spoon"></ion-icon>
+      <ion-icon *ngIf="group.groupname==='Services'" name="bug"></ion-icon>
+      <header>{{group.groupname}}</header>
+    </ion-col>
+  </ion-row>
+  <ion-row class="row footer-filter" *ngIf="filterApplied">
+    <button class="col-xs-4" style="background: #0a6526;" (click)="getProducts()" *ngIf="products && products.length>0">
+      <i class="fa fa-reply" aria-hidden="true">
+        <span class="left-space">Back</span>
+      </i>
+    </button>
+    <button class="col-xs-4" style="background: #0a6526;" (click)="sortAlert()" *ngIf="products && products.length>0">
+      <i class="fa fa-sort" aria-hidden="true">
+        <span class="left-space">Sort</span>
+      </i>
+    </button>
+    <button class="col-xs-4" style="background: #0a6526;" (click)="addFiltersModal()" *ngIf="products && products.length>0">
+      <i class="fa fa-filter" aria-hidden="true">
+        <span class="left-space">Filter</span>
+      </i>
+    </button>
+  </ion-row>
+</ion-footer>

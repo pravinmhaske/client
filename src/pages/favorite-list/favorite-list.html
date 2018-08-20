@@ -1,0 +1,61 @@
+<ion-header>
+	<div id="flipkart-navbar">
+		<div class="row">
+			<div class="col-md-1" *ngIf="!isMobile">
+				<img src="../assets/img/logo/logo.png" height="30px" width="100%" style="margin-top: 7px;" />
+			</div>
+			<div class="col-md-4 col-sm-12 col-xs-12 row2" *ngIf="isMobile">
+				<ion-navbar style="min-height: 44px;">
+					<button ion-button menuToggle>
+						<ion-icon name="menu"></ion-icon>
+					</button>
+				</ion-navbar>
+			</div>
+			<div class="col-md-7" style="padding-top: 11px" *ngIf="!isMobile">
+				<ul class="largenav pull-left" *ngFor="let item of appMenuItems">
+					<li class="upper-links" *ngIf="((item.title==='Logout') && isUserLoggedIn)">
+						<a class="links" (click)="openPage(item)">
+							<ion-icon item-left [name]="item.icon"></ion-icon>{{item.title}}</a>
+					</li>
+					<li class="upper-links" *ngIf="(((item.title==='My Profile')) && isUserLoggedIn && isSeller)">
+						<a class="links" (click)="openPage(item)">
+							<ion-icon item-left [name]="item.icon"></ion-icon>{{item.title}}</a>
+					</li>
+					<li class="upper-links" *ngIf="(item.title!=='Logout' && item.title!=='Wish list' && item.title!=='Login'  && item.title!=='My Profile' && item.title!=='My Products')">
+						<a class="links" (click)="openPage(item)">
+							<ion-icon item-left [name]="item.icon"></ion-icon>{{item.title}}</a>
+					</li>
+					<li class="upper-links" *ngIf="(item.title==='Wish list' && !isSeller)">
+						<a class="links" (click)="openPage(item)">
+							<ion-icon item-left [name]="item.icon"></ion-icon>{{item.title}}</a>
+					</li>
+					<li class="upper-links" *ngIf="(item.title==='Login' && !isUserLoggedIn)">
+						<a class="links" (click)="openPage(item,$event)">
+							<ion-icon item-left [name]="item.icon"></ion-icon>{{item.title}}</a>
+					</li>
+					<li class="upper-links" *ngIf="(((item.title==='My Products'|| item.title==='Seller Page')) && isUserLoggedIn && isSeller)">
+						<a class="links" (click)="openPage(item)">
+							<ion-icon item-left [name]="item.icon"></ion-icon>{{item.title}}</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</ion-header>
+
+<ion-content>
+    <ion-list>
+        <ion-item-sliding *ngFor="let favorite of favorites">
+            <button ion-item (click)="itemTapped(favorite)">
+                <ion-thumbnail item-left>
+                    <img src="{{favorite.property.thumbnail}}"/>
+                </ion-thumbnail>
+                <h2>{{favorite.property.title}}</h2>
+                <p>{{favorite.property.city}}, {{favorite.property.state}} ∙ {{favorite.property.price}}</p>
+            </button>
+            <ion-item-options>
+                <button danger (click)="deleteItem(favorite)">Delete</button>
+            </ion-item-options>
+        </ion-item-sliding>
+    </ion-list>
+</ion-content>

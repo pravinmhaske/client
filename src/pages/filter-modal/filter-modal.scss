@@ -1,0 +1,66 @@
+.filter-modal {
+  .cat-filter-label {
+    background-color: #0a6526;
+    // background-color: #505050;
+    display: block;
+    padding: 0 5px;
+    color: #fff;
+    margin: 5px;
+    cursor: pointer;
+    label {
+        text-decoration: underline;
+    }
+    span {
+        float: right;
+        line-height: 1.5em;
+    }
+  }
+  .cat-filter-options {
+    display: inline-block;
+    margin: 0 5px 5px 0;
+    cursor: pointer;
+
+    .filter-item-color {
+        padding: 3px 3px 0px 7px;
+        width: 32px;
+        height: 30px;
+        border-radius: 50%;
+        line-height: 25px;
+        border: 1px solid lightgrey;
+        input {
+            height: 20px;
+            width: 20px;
+        }
+        input[type=checkbox] {
+            margin: 4px 0 0;
+            margin-top: 1px\9;
+            line-height: normal;
+            height: 20px;
+            width: 20px;
+            padding: 0;
+        }
+    }
+    .filter-item-checkbox {
+        background: lightgray;
+        padding: 0 8px;
+    }    
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .filter-modal {
+    & > div {
+        padding: 15px;
+    }
+    
+    .cat-filter-label {
+        padding: 10px;
+    }
+
+    .cat-filter-options {
+        .filter-item-checkbox {
+            padding: 3px 10px;
+        }
+    }
+  }
+}

@@ -1,0 +1,53 @@
+page-category-modal {
+
+}
+.right-aligned {
+	margin-right: 0;
+    margin-left: auto;
+}
+ion-header {
+	margin: 0;
+}
+.row {
+	margin: 0 !important;
+}
+.subcat-input {
+	font-size: 1.1em;
+    margin-top: 3px;
+    padding: 0 !important;
+    border-radius: 0;
+    text-align: center;
+	min-height: 100px !important;
+	div {
+		height: 40px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+	}
+}
+.category {
+	width: 100%;
+	margin: 0;
+    .heading {
+		padding: 10px 5px;
+		letter-spacing: 0.05em;
+		background-color: #0a6526;
+		color: #fff;
+	}
+	.subcat-chip {
+		margin: 3px;
+		border: 2px solid green;
+		background: white;
+		font-size: 1.2em;
+		color: black;
+
+		ion-label {
+			margin: 0 2px 0 -3px;
+		    font-size: 1.1em;
+		    color: #000;
+		    line-height: 21px;
+		}
+	}
+}

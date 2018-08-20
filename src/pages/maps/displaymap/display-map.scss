@@ -1,0 +1,61 @@
+agm-map {
+    height: 250px;
+    width: 100%;
+}
+map-markers, map-markers .container {
+    width: 100% !important;
+}
+.container {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.panel-title > a:before {
+    float: right !important;
+    font-family: FontAwesome;
+    content:"\f055";
+    padding-right: 5px;
+}
+.panel-title > a.collapsed:before {
+    float: right !important;
+    content:"\f056";
+}
+.panel-title > a:hover, 
+.panel-title > a:active, 
+.panel-title > a:focus  {
+    text-decoration:none;
+}
+
+.panel-group{
+    margin-bottom: 5px !important;
+}
+
+.panel-heading h4:hover,.panel-heading h4:active,.panel-heading h4:visited{
+color:#009900;
+}
+
+.product-name {
+    max-width: 100%;
+    div {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        width: 100%;
+        border-radius: 0;
+    }
+}
+
+.filter-nav{
+    padding: 5px 0 5px 5px;
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 992px) {
+    .desktop-only {
+        display: none;
+    }
+}
+
+.toolbar-background-md {
+    /* border-color: #b2b2b2; */
+    background: dimgray;
+}

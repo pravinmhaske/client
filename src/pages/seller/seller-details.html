@@ -1,0 +1,558 @@
+<ion-header>
+  <div id="flipkart-navbar">
+    <div class="row">
+      <div class="col-md-1" *ngIf="!isMobile">
+        <img src="../assets/img/logo/logo.png" height="30px" width="100%" style="margin-top: 7px;" />
+      </div>
+      <div class="col-md-4 col-sm-12 col-xs-12 row2" *ngIf="isMobile">
+        <ion-navbar style="min-height: 44px;">
+          <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+          </button>
+        </ion-navbar>
+      </div>
+      <div class="col-md-7" style="padding-top: 11px" *ngIf="!isMobile">
+        <ul class="largenav pull-left" *ngFor="let item of appMenuItems">
+          <li class="upper-links" *ngIf="((item.title==='Logout') && isUserLoggedIn)">
+            <a class="links" (click)="openPage(item)">
+              <ion-icon item-left [name]="item.icon"></ion-icon>{{item.title}}</a>
+          </li>
+          <li class="upper-links" *ngIf="(((item.title==='My Profile')) && isUserLoggedIn && isSeller)">
+            <a class="links" (click)="openPage(item)">
+              <ion-icon item-left [name]="item.icon"></ion-icon>{{item.title}}</a>
+          </li>
+          <li class="upper-links" *ngIf="(item.title!=='Logout' && item.title!=='Wish list' && item.title!=='Login'  && item.title!=='My Profile' && item.title!=='My Products')">
+            <a class="links" (click)="openPage(item)">
+              <ion-icon item-left [name]="item.icon"></ion-icon>{{item.title}}</a>
+          </li>
+          <li class="upper-links" *ngIf="(item.title==='Wish list' && !isSeller)">
+            <a class="links" (click)="openPage(item)">
+              <ion-icon item-left [name]="item.icon"></ion-icon>{{item.title}}</a>
+          </li>
+          <li class="upper-links" *ngIf="(item.title==='Login' && !isUserLoggedIn)">
+            <a class="links" (click)="openPage(item,$event)">
+              <ion-icon item-left [name]="item.icon"></ion-icon>{{item.title}}</a>
+          </li>
+          <li class="upper-links" *ngIf="(((item.title==='My Products'|| item.title==='Seller Page')) && isUserLoggedIn && isSeller)">
+            <a class="links" (click)="openPage(item)">
+              <ion-icon item-left [name]="item.icon"></ion-icon>{{item.title}}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</ion-header>
+
+<ion-content>
+  <!--<div class="container" style='height:100%;overflow: scroll;'>-->
+  <div class="container-sellers-page">
+
+    <div class='row'>
+      <div class="col-xs-12 col-md-4">
+        <!--             <form name="form" (ngSubmit)="saveSellerDetails()" #f="ngForm" novalidate> -->
+        <form (ngSubmit)="saveSellerDetails()" [formGroup]="sellerForm" novalidate>
+          <div class="panel panel-default">
+            <div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-xs-12">
+                  <ion-card class="card-md-12">
+                    <ion-card-content>
+                      <div class="card-body text-center">
+                        <h1 class="card-title green-color">
+                          {{sellerData?.loggedInUserDetails.seller.shopname| titleCase}}
+
+                          <button type="button" class="btn btn-danger btn-xs">
+                            3.5
+                            <ion-icon ios="ios-star" md="md-star"></ion-icon>
+                          </button>
+                        </h1>
+                        <p class="card-text">{{sellerData?.loggedInUserDetails.seller.shopinfo | titleCase}}</p>
+
+                        <!-- <span class="social-box">
+                          <a (click)="share('www.facebook.com')">
+                            <i class="fa fa-facebook"></i>
+                          </a>
+                          <a href="#">
+                            <i class="fa fa-twitter"></i>
+                          </a>
+                        </span> -->
+
+                        <div class="form-group margin-top-10" *ngIf="!isSellerEditActivated">
+                          <button class="btn btn-success btn-xs bg-color" type="button">
+                            <ion-icon ios="ios-phone-portrait" md="md-phone-portrait" style="margin-right:5px;"></ion-icon>{{sellerData?.loggedInUserDetails.mobile}}
+                          </button>
+                        </div>
+                        <div class="form-group margin-top-10">
+                          <button *ngIf="!isSellerEditActivated && isSeller" type="button" (click)='editSellerDetails($event)' class="btn btn-success btn-xs bg-color">
+                            Edit shop details
+                            <ion-icon ios="ios-create" md="md-create"></ion-icon>
+                          </button>
+
+                          <button *ngIf="isSellerEditActivated" type="submit" class="btn btn-success btn-xs bg-color">
+                            Save
+                            <ion-icon ios="ios-checkbox-outline" md="md-checkbox-outline"></ion-icon>
+                          </button>
+                          <button *ngIf="isSellerEditActivated" type="button" (click)='isSellerEditActivated=false;' class="btn btn-success btn-xs bg-color">
+                            Cancel
+                          </button>
+                          <button *ngIf="isSeller" type="button" class="btn btn-success btn-xs bg-color" (click)='addOutletCLick($event)'>
+                            Add Branch/Outlet
+                            <ion-icon ios="plus" md="md-create"></ion-icon>
+                          </button>
+                        </div>
+                      </div>
+                    </ion-card-content>
+                  </ion-card>
+                  <ion-card class="card-md-12" *ngIf="isSellerEditActivated">
+                    <ion-card-content>
+                      <span class="mandatory-star">*</span>
+                      <input class="required" type="text" class="form-control" id="shopname" formControlName="shopname" placeholder="Your Shopname">
+                      <!--<input type="text" class="form-control textarea-as-label"   style="font-size:25px;width:50%;" value={{sellerData?.shopname}}>-->
+                      <small [hidden]="sellerForm.controls.shopname.valid || (sellerForm.controls.shopname.pristine && !isFormSubmitted)" class="text-danger">
+                        Your shop name is required.
+                      </small>
+                      <br>
+                      <div>
+                        <div>
+                          <span class="mandatory-star">*</span>
+                          <textarea class="form-control" rows="5" id="shopinfo" formControlName="shopinfo" placeholder="Enter Your Shop Information"></textarea>
+                          <small [hidden]="sellerForm.controls.shopinfo.valid || (sellerForm.controls.shopinfo.pristine && !isFormSubmitted)" class="text-danger">
+                            Shop information name is required.
+                          </small>
+                        </div>
+                      </div>
+                      <br>
+                      <div>
+                        <input type='text' formControlName="shopOwnerName" class="form-control" id="shopOwnerName" placeholder="Shop owner name">
+                      </div>
+                      <br>
+                      <div>
+                        <input type='text' formControlName="website" class="form-control" id="shopwebsite" placeholder="www.yourwebsitename.com">
+                      </div>
+                      <br>
+                      <div>
+                        <!--{{sellerData?.phone}}-->
+                        <div>
+                        </div>
+                        <span class="mandatory-star">*</span>
+                        <input type="text" formControlName="contactnumber" id='contactnumber' class="form-control" placeholder="Your contact number">
+                        <small [hidden]="sellerForm.controls.contactnumber.valid || (sellerForm.controls.contactnumber.pristine && !isFormSubmitted)"
+                          class="text-danger">
+                          Contact number is required.
+                        </small> </div>
+                      <br>
+                      <div class="form-group">
+
+                        <img-cropper [image]="data1" [settings]="cropperSettings1" (onCrop)="cropped($event)"></img-cropper>
+                        <span class="result" *ngIf="data1.image">
+                          <img [src]="data1.image" style="min-height:200px;max-height:250px;min-width:200px;max-width:250px;">
+                        </span>
+                      </div>
+                      <div  *ngIf="isSellerEditActivated">
+                          <button type="submit" class="btn btn-success btn-xs bg-color">
+                              Save
+                              <ion-icon ios="ios-checkbox-outline" md="md-checkbox-outline"></ion-icon>
+                            </button>
+                            <button type="button" (click)='isSellerEditActivated=false;' class="btn btn-success btn-xs bg-color">
+                              Cancel
+                            </button>
+                      </div>
+                    </ion-card-content>
+                  </ion-card>
+
+                  <ion-card *ngIf="!isSellerEditActivated">
+                    <ion-card-content>
+                      <div>
+                        <label>Shop Location: </label>
+                        <!-- <span *ngIf="isSellerEditActivated" (click)="addCurrentLocation()" class="add-location">Add current location</span> -->
+                      </div>
+                      <!--<div class="row" [hidden]="!showMap">-->
+                      <div class="row" *ngIf="sellerData" class="seller-details-container">
+                        <!-- <div *ngIf="isMobile" id="outletlocs" style="width: 500px; height: 225px;"></div> -->
+                        <!-- <div id="outletlocs"></div> -->
+                        <display-map [outletsData]="sellerData.loggedInUserDetails.seller.outlets"></display-map>
+                      </div>
+                    </ion-card-content>
+                  </ion-card>
+                  <!-- <ion-card>
+                    <ion-card-content>
+                      <div>
+                        <div>
+                          <label>Establishment Year:</label>
+                          <span>{{sellerData?.startedon|date}}</span>
+                        </div>
+                        <input type="date" *ngIf="isSellerEditActivated" id='establishmentdate' class="form-control" placeholder="Your Shopname"
+                          value="{{sellerData?.startedon|date:'yyyy-MM-dd'}}">
+                        <div>
+                          <button style="margin: 12px 0px;" *ngIf="isSellerEditActivated" type="submit" class="btn btn-success pull-right">Save Details</button>
+                        </div>
+                      </div>
+                    </ion-card-content>
+                  </ion-card> -->
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-xs-12 col-md-8 col-sm-12 col-xs-12">
+        <div class="tabbable-panel" style="position: static;" *ngIf="!addOutlet">
+          <div class="tabbable-line">
+            <ul class="nav nav-tabs ">
+              <li class="active col-sm-4 col-xs-4">
+                <a href="#seller_tab_default_1" data-toggle="tab">
+                  Branch/Outlets </a>
+              </li>
+              <li *ngIf="isSeller" class="col-sm-4 col-xs-4">
+                <a href="#seller_tab_default_2" data-toggle="tab">
+                  Add Products </a>
+              </li>
+              <li class="col-sm-4 col-xs-4">
+                <a href="#seller_tab_default_3" data-toggle="tab">
+                  Shop Review</a>
+              </li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane active" id="seller_tab_default_1">
+                <!--<ion-card class="col-xs-6 col-lg-4" *ngFor="let outlet of sellerData?.outlets">
+                                        <div>{{outlet.address}}</div>
+                                        <div>Edit</div>
+                                    </ion-card>-->
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        <div class="row">
+                          <div class="col-md-3 col-xs-8 col-lg-3 col-sm-6" style="padding: 0;">
+                            <!--<img  [src]="(sellerData?.img}!= null) ? (sellerData?.img) : myImgUrl" src="{{sellerData?.img}}" class="img-responsive">-->
+                            <img [attr.src]="sellerData?.imgbanner ? sellerData.imgbanner : myImgUrl" class="img-responsive seller-logo-img">
+
+                          </div>
+                          <div class="col-md-4 col-xs-4 col-lg-4 col-sm-6">
+                            <h5 class="green-color">{{sellerData?.loggedInUserDetails.seller.shopname |titleCase}}</h5>
+                            <p *ngIf="sellerData?.shopowner!==''">by {{sellerData?.loggedInUserDetails.seller.shopowner |titleCase}}
+                            </p>
+
+                            <div>
+                              <tooltip-content #myTooltip>
+                                <b>
+                                  <i>
+                                    <span class="tooltip-color">1 peopel like this seller.</span>
+                                  </i>
+                                </b>
+                              </tooltip-content>
+
+                              <button class="btn btn-primary btn-xs bg-color" [tooltip]="myTooltip">Like</button>
+                            </div>
+                            <!-- <button class="btn btn-primary btn-xs bg-color">
+
+
+                                                                <i class="fa fa-heart-o" aria-hidden="true"></i>
+                                                                 Like
+                                                            </button> -->
+                          </div>
+                          <div class="col-xs-12 col-md-5 col-sm-12 col-lg-5">
+                            <div class="well well-sm">
+                              <div class="row">
+                                <div class="col-xs-12 col-md-6 text-center">
+                                  <h3 class="rating-num">4.0</h3>
+                                  <div class="rating">
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"> </span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"> </span>
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                  </div>
+                                  <div>
+                                    <span class="glyphicon glyphicon-user"></span>feature coming soon
+                                  </div>
+                                </div>
+                                <div class="col-xs-12 col-md-6">
+                                  <div class="row rating-desc">
+                                    <div style="padding:0;" class="col-xs-4 col-md-3 text-right">
+                                      <span class="glyphicon glyphicon-star"></span>5
+                                    </div>
+                                    <div class="col-xs-8 col-md-9">
+                                      <div class="progress progress-striped">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"
+                                          style="width: 80%">
+                                          <span class="sr-only">80%</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <!-- end 5 -->
+                                    <div style="padding:0;" class="col-xs-4 col-md-3 text-right">
+                                      <span class="glyphicon glyphicon-star"></span>4
+                                    </div>
+                                    <div class="col-xs-8 col-md-9">
+                                      <div class="progress">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"
+                                          style="width: 60%">
+                                          <span class="sr-only">60%</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <!-- end 4 -->
+                                    <div style="padding:0;" class="col-xs-4 col-md-3 text-right">
+                                      <span class="glyphicon glyphicon-star"></span>3
+                                    </div>
+                                    <div class="col-xs-8 col-md-9">
+                                      <div class="progress">
+                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                          <span class="sr-only">40%</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <!-- end 3 -->
+                                    <div style="padding: 0;" class="col-xs-4 col-md-3 text-right">
+                                      <span class="glyphicon glyphicon-star"></span>2
+                                    </div>
+                                    <div class="col-xs-8 col-md-9">
+                                      <div class="progress">
+                                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"
+                                          style="width: 20%">
+                                          <span class="sr-only">20%</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <!-- end 2 -->
+                                    <div style="padding:0;" class="col-xs-4 col-md-3 text-right">
+                                      <span class="glyphicon glyphicon-star"></span>1
+                                    </div>
+                                    <div class="col-xs-8 col-md-9">
+                                      <div class="progress">
+                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"
+                                          style="width: 15%">
+                                          <span class="sr-only">15%</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <!-- end 1 -->
+                                  </div>
+                                  <!-- end row -->
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="outletsList">Total outlets Available : {{outletsList.length}}</div>
+                  <div class="col-md-12" *ngFor="let outlet of sellerData?.loggedInUserDetails.seller.outlets">
+                    <div class="panel panel-default">
+                      <div style="padding: 8px;">
+                        <div class="row">
+                          <div style="display: inline-block; margin-right: 5px;">
+                            <img style="height: 50px; width: 50px;" [attr.src]="sellerData?.img ? sellerData.img : myImgUrl" class="img-responsive">
+                          </div>
+                          <div style="display: inline-block">
+                            <h5>{{outlet.address | titleCase}}</h5>
+                            <div class="inline-block">
+                              <tooltip-content #likeShopTooltip>
+                                <b>
+                                  <i>
+                                    <span class="tooltip-color">1 people like this outlet.</span>
+                                  </i>
+                                </b>
+                              </tooltip-content>
+
+                              <button class="btn btn-primary btn-xs bg-color" [tooltip]="likeShopTooltip">
+                                <i class="fa fa-heart-o" aria-hidden="true"></i> Like</button>
+                            </div>
+
+                            <div class="inline-block">
+                              <tooltip-content #contactTooltip>
+                                <b>
+                                  <i>
+                                    <span class="tooltip-color">contact this outlet</span>
+                                  </i>
+                                </b>.
+                              </tooltip-content>
+
+                              <button class="btn btn-success btn-xs bg-color" [tooltip]="contactTooltip">
+                                <ion-icon ios="ios-phone-portrait" md="md-phone-portrait" style="margin-right:5px;"></ion-icon>{{outlet.mobile}}</button>
+                            </div>
+                            <div class="inline-block">
+                              <tooltip-content #shopTimeTooltip>
+                                <b>
+                                  <i>
+                                    <span class="tooltip-color">Shop is open between this hours,feel free to visit.</span>
+                                  </i>
+                                </b>.
+                              </tooltip-content>
+
+                              <button class="btn btn-success btn-xs bg-color" [tooltip]="shopTimeTooltip">
+                                <ion-icon ios="ios-phone-portrait" md="md-phone-portrait" style="margin-right:5px;"></ion-icon>
+                                {{outlet.workinghrs}}</button>
+                            </div>
+                            <button *ngIf="isSeller" (click)="editOutletInfo(outlet)" class="btn btn-success btn-xs bg-color">
+                              <ion-icon ios="ios-create" md="md-create"></ion-icon> Edit
+                            </button>
+
+
+                          </div>
+
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              <div class="tab-pane" id="seller_tab_default_2">
+                <div class='row'>
+                  <div class="col-xs-12 col-md-12">
+                    <add-products-template *ngIf="outletsList" [shopname]="sellerData?.loggedInUserDetails.seller.shopname" [product]="product"
+                      [outletsList]="outletsList"></add-products-template>
+                  </div>
+                </div>
+
+              </div>
+              <div class="tab-pane" id="seller_tab_default_3">
+                <p style="padding-left: 25px;">
+                  <ion-icon ios="ios-alert" md="md-alert"></ion-icon> Review and comments functionality is in progress.This
+                  feature will shorlty be introduced.
+                  <p>
+                    <ion-card *ngFor="let post of blogData">
+                      <ion-card-content>
+                        <div>
+
+                          <div class="float-left">
+                            <ion-avatar item-left>
+                              <img class="mg-circle image" src="assets/img/card/a3.jpg" /> </ion-avatar>
+                          </div>
+                          <div class="float-right">12th Aug2017</div>
+                          <div style="clear: both"></div>
+                        </div>
+                        <div>
+                          {{post.shopinfo | titleCase}}
+                          <button ion-button no-padding color="black" clear small icon-left>
+                            <ion-icon ios="ios-create" style="margin-top:-12px;" md="md-create"></ion-icon>
+                          </button>
+
+                        </div>
+                      </ion-card-content>
+                      <ion-row>
+                        <ion-col col-6>
+                          <button ion-button color="purple" clear small icon-left>
+                            <ion-icon name='thumbs-up'></ion-icon>
+                            77
+                          </button>
+                          <button ion-button color="purple" clear small icon-left>
+                            <ion-icon name='thumbs-down'></ion-icon>
+                            43
+                          </button>
+                        </ion-col>
+                        <ion-col col-6 align-self-center text-center>
+
+                          <!-- <button ion-button no-padding color="purple" clear small icon-left>
+                                            <label>share</label>&nbsp;
+                                            <ion-icon name="logo-facebook"></ion-icon>
+                                        </button> -->
+                          <div class="inline-block">
+                            <tooltip-content #myTooltip>
+                              <b>Very</b>
+                              <span style="color: #C21F39">Dynamic</span>
+                              <span style="color: #00b3ee">Reusable</span>
+                              <b>
+                                <i>
+                                  <span style="color: #ffc520">Tooltip With</span>
+                                </i>
+                              </b>
+                              <small>Html support</small>.
+                            </tooltip-content>
+
+                            <button ion-button no-padding color="purple" clear small icon-left [tooltip]="myTooltip">
+                              <label>share</label>&nbsp;
+                              <ion-icon name="logo-facebook"></ion-icon>f</button>
+                          </div>
+                          <button ion-button no-padding color="black" clear small icon-left>
+                            <ion-icon name="logo-twitter"></ion-icon>
+                          </button>
+                        </ion-col>
+                      </ion-row>
+                    </ion-card>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="add-outlet-container" [hidden]="!addOutlet">
+          <div class="outlet-header tabbable-panel" style="position: static;">
+            <h3 style="margin-left: 5px;">Add new outlet</h3>
+            <button (click)="addOutlet = false" style="float: right;">Cancel</button>
+          </div>
+          <form name="form" (ngSubmit)="outletAddform.form.valid && addShopOutlet(outlet.phone,outlet.working_hours)" #outletAddform="ngForm" novalidate>
+            <div class="form-group">
+              <span style="padding-left: 15px;">Not getting location? Provide nearby place</span>
+              <div class="input-group pull-right" style='display:inline-block'>
+                <div id="radioBtn" class="btn-group">
+                  <!-- <a class="btn btn-primary btn-sm active" (click)='selectLocationChoices($event)' data-toggle="fun" data-title="X">Pick My Location</a> -->
+                  <a class="btn btn-primary btn-sm active" (click)='selectLocationChoices($event)' data-toggle="fun" data-title="Y">From
+                    Google Maps</a>
+                  <a class="btn btn-primary btn-sm notActive" (click)='selectLocationChoices($event)'>Manual entry</a>
+                </div>
+              </div>
+            </div>
+            <div *ngIf='pickMapLocation' style="width:100%;" class="row text-center">
+              <map-markers></map-markers>
+            </div>
+            <div *ngIf="!pickMapLocation">
+              <span style="padding-left: 15px;">Enter address only if you can not find your address in maps</span>
+              <div class="form-group">
+                <div class="col-md-12" style="margin-top: 10px;" [ngClass]="{ 'has-error': outletAddform.submitted }">
+                  <label class="required">Address</label>
+                  <input type="text" [(ngModel)]="outlet.address" class="form-control" #address="ngModel" name="address" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-md-6" style="margin-top: 10px;" [ngClass]="{ 'has-error': outletAddform.submitted }">
+                  <label class="required">City</label>
+                  <input type="text" [(ngModel)]="outlet.city" #city="ngModel" name="city" class="form-control" required>
+                  <div [hidden]="((city.pristine) && !outletAddform.submitted)">
+                    <div class="help-block classError" [hidden]="!city.hasError('required') || !(outletAddform.submitted)">City is required.</div>
+                  </div>
+                </div>
+                <div class="col-md-6" style="margin-top: 10px;" [ngClass]="{ 'has-error': outletAddform.submitted }">
+                  <label class="required">Zip/Pin Code</label>
+                  <input type="text" [(ngModel)]="outlet.zip" class="form-control" pattern="[0-9]*" #zip="ngModel" name="zip" required>
+                  <div *ngIf="outletAddform.submitted && !zip.valid" class="help-block">Zip/Pin code is required.</div>
+                  <div class="help-block classError" [hidden]="!zip.hasError('pattern')">Zip/Pin code should contain only
+                    numbers.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-6" style="margin-top: 10px;" [ngClass]="{ 'has-error': outletAddform.submitted && !contactnumber.valid  }">
+                <label class="required">Contact Number</label>
+                <input type="text" [(ngModel)]="outlet.phone" pattern="[0-9]*" #contactnumber="ngModel" name="contactnumber" class="form-control"
+                  required>
+                <div   [hidden]="((contactnumber.valid || contactnumber.pristine) && !outletAddform.submitted)">
+                  <!-- <div class="help-block classError" [hidden]="!contactnumber.hasError('required') || !(outletAddform.submitted && !contactnumber.valid) ">Contact
+                    number is required.</div> -->
+                  <div class="help-block classError" [hidden]="!contactnumber.hasError('pattern')">Contact Number should
+                    contain only numbers.</div>
+                </div>
+              </div>
+              <div class="col-md-6" style="margin-top: 10px;" [ngClass]="{ 'has-error': outletAddform.submitted && !working_hours.valid }">
+                <label class="required">Working hours</label>
+                <input type="text" [(ngModel)]="outlet.working_hours" class="form-control" #working_hours="ngModel" name="working_hours"
+                  required>
+                <!-- <div *ngIf="outletAddform.submitted && !working_hours.valid" class="help-block">Working hours for your outlet is required.</div> -->
+              </div>
+            </div>
+            <div class="form-group col-lg-12 col-xs-12">
+              <button class="submit-outlet" type='submit'>Save outlet details</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</ion-content>

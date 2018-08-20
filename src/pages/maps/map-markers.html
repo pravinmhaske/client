@@ -1,0 +1,19 @@
+<div class="container">
+    <div class="form-group" style="display: flex;">
+        <input 
+            placeholder="search for location" 
+            autocorrect="off" 
+            autocapitalize="off" 
+            spellcheck="off" 
+            type="text" 
+            class="form-control" 
+            #search 
+            [formControl]="searchControl">
+        <button type="button" class="btn-background" (click)="pickMyCurrentLocation(null,null)">
+            <!-- Pick my location -->
+            <ion-icon class="search-bar-icon" name="pin"></ion-icon>
+        </button>
+    </div>
+    <div id="userLocation" style="height: 250px; width: 100%;"></div>
+</div>
+

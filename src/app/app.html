@@ -1,0 +1,65 @@
+<ion-menu [content]="content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>
+        <ion-icon ios="ios-options" md="md-options"></ion-icon>
+        <span style="padding-left:34px;"> Selomart Menu</span>
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+
+      <!--<ion-list-header style="color:gray">
+        Selomart Menu
+      </ion-list-header>-->
+      <div *ngFor="let menuItem of appMenuItems">
+
+
+        <button *ngIf="((menuItem.title==='Logout') && isUserLoggedIn)" menuClose ion-item (click)="openPage(menuItem)">
+          <ion-icon item-left [name]="menuItem.icon"></ion-icon>
+          <div class="menu-title">{{menuItem.title}}</div>
+        </button>
+        <button *ngIf="(((menuItem.title==='My Profile')) && isUserLoggedIn && isSeller)" menuClose ion-item (click)="openPage(menuItem)">
+          <ion-icon item-left [name]="menuItem.icon"></ion-icon>
+          <div class="menu-title">{{menuItem.title}}</div>
+        </button>
+        <button *ngIf="(menuItem.title!=='Logout' && menuItem.title!=='Wish list' && menuItem.title!=='Login'  && menuItem.title!=='My Profile' && menuItem.title!=='My Products')"
+          menuClose ion-item (click)="openPage(menuItem)">
+          <ion-icon item-left [name]="menuItem.icon"></ion-icon>
+          <div class="menu-title">{{menuItem.title}}</div>
+        </button>
+
+        <button *ngIf="(menuItem.title==='Wish list' && !isSeller)" menuClose ion-item (click)="openPage(menuItem)">
+          <ion-icon item-left [name]="menuItem.icon"></ion-icon>
+          <div class="menu-title">{{menuItem.title}}</div>
+        </button>
+
+
+        <button *ngIf="(menuItem.title==='Login' && !isUserLoggedIn)" menuClose ion-item (click)="openPage(menuItem,$event)">
+          <ion-icon item-left [name]="menuItem.icon"></ion-icon>
+          <div class="menu-title">{{menuItem.title}}</div>
+        </button>
+
+        <button *ngIf="(((menuItem.title==='My Products'|| menuItem.title==='Seller Page')) && isUserLoggedIn && isSeller)" menuClose
+          ion-item (click)="openPage(menuItem)">
+          <ion-icon item-left [name]="menuItem.icon"></ion-icon>
+          <div class="menu-title">{{menuItem.title}}</div>
+        </button>
+
+        <!--<button *ngIf="((menuItem.title==='Seller Page' && (menuItem.title==='My Products')) && isUserLoggedIn && isSeller)" menuClose ion-item  (click)="openPage(menuItem)">
+        <ion-icon item-left [name]="menuItem.icon"></ion-icon>
+        <div class="menu-title">{{menuItem.title}}"zampak"</div>
+      </button>-->
+
+      </div>
+
+
+    </ion-list>
+
+  </ion-content>
+
+</ion-menu>
+
+<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>

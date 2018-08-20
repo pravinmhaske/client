@@ -1,0 +1,83 @@
+page-signup-modal {
+  .scroll-content {
+    overflow: hidden;
+  }
+  .round {
+    border-radius: 3%;
+  }
+  .swiper-pagination-bullet {
+    background-color: white;
+  }
+  .swiper-pagination-bullet-active {
+    background-color: #0a6526 !important;
+    transition: all 500ms cubic-bezier(0.250, 0.250, 0.750, 0.750);
+  }
+  ion-list {
+    margin: 0 !important;
+  }
+  ion-slides,
+  .swiper-container {
+    height: 30vh;
+  }
+  .slider-item {
+    height: 30vh;
+    width: 100%;
+    background-size: cover;
+  }
+  .slide-zoom {
+    height: 100%;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.22)) !important;
+  }
+  .scroll-content {
+    border-radius: 3%;
+  }
+}
+
+// sign up modal
+ ion-modal.my-popup {
+  @media (min-width: 300px) and (min-height: 500px) {
+    ion-backdrop {
+      visibility: visible;
+    }
+  }
+  .modal-wrapper {
+    position: absolute;
+    overflow: hidden;
+    max-width: 280px;
+    border-radius: 2px;
+    width: 80vw;
+    height: 50vh;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border: 0;
+    box-shadow: 0 16px 20px rgba(0,0,0,.4);
+    background-color: #fafafa;
+  }
+}
+
+.scroll-zoom-wrapper{
+overflow:auto;
+height:100%;
+}
+
+ #radioBtn .notActive{
+    color: #3276b1 !important;
+    background-color: #fff !important;
+}
+
+.btn-background{
+  background: #0a6526 !important;
+  color: white !important;
+}
+
+
+.close-btn{
+  padding:5px 5px 0 0;
+}
+
+.classError{
+  color:#a94442 !important;
+}

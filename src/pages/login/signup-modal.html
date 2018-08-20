@@ -1,0 +1,216 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Login</ion-title>
+        <ion-buttons end (click)="dismiss()">
+            <button ion-button icon-only>
+            <ion-icon name='close-circle'></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+<ion-content scroll='true'>
+    <ion-scroll zooming="true" direction="xy" style="width:100% ;">
+        <div class="row" style='margin: 15px !important;'>
+            <!--<div class='col-md-12 col-sm-12 col-xs-12 pull-right'>
+                    <button type="button" (click)='dismiss();' class="close-btn close pull-right"  data-dismiss="modal" aria-hidden="true">x</button>
+                </div>-->
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="row text-center sign-with">
+                    <div class="col-md-12">
+                        <h3>Sign in with</h3>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="btn-group btn-group-justified">
+                            <a style="color: #e1e1e1;" 
+                                (click)="loginWithFb()" 
+                                class="btn btn-primary btn-background">
+                                Facebook
+                            </a> 
+                            <a style="color: #e1e1e1;" 
+                                (click)="loginWithGmail()"
+                                class="btn btn-danger btn-background">
+                                Google
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="tabbable-panel">
+                    <div class="tabbable-line">
+                        <ul class="nav nav-tabs ">
+                            <li class="active">
+                                <a href="#tab_signup_default_1" data-toggle="tab">Login Form </a>
+                            </li>
+                            <li>
+                                <a href="#tab_signup_default_2" data-toggle="tab">Registration Form </a>
+                            </li>                                
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_signup_default_1">
+                                <form name="form" (ngSubmit)="f.form.valid && loginUser(model.username,model.password)" #f="ngForm" novalidate>
+                                    <div *ngIf="!forgetPwd" class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid  }">
+                                        <label class="required" for="username">Contact Number</label>
+                                        <input type="text" class="form-control" pattern="[0-9]*" name="username" [(ngModel)]="model.username" #username="ngModel" required placeholder="Your registered contact Number" />
+                                        <!--<div *ngIf="f.submitted && !username.valid" class="help-block">Username is required1</div>-->
+                                        <div [hidden]="((username.valid || username.pristine) && !f.submitted)">
+                                            <!--<div  class="help-block classError" [hidden]="!username.hasError('minlength')">Mobile number should contain 10 digits.</div>-->
+                                            <div class="help-block classError" [hidden]="!username.hasError('required') || !(f.submitted && !username.valid) ">Contact number is required.</div>
+                                            <div class="help-block classError" [hidden]="!username.hasError('pattern')">Contact Number should contain only numbers.</div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="!forgetPwd" class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+                                        <label class="required" for="password">Password</label>
+                                        <input type="password" placeholder="Your Password" class="form-control" name="password" [(ngModel)]="model.password" #password="ngModel" required />
+                                        <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required.</div>
+                                    </div>
+                                    <div *ngIf="forgetPwd" class="form-group">
+                                        <label class="required" for="forgetPwd">Email Id</label>
+                                        <input type="email" [(ngModel)]="regMail" name="sendmail" placeholder="Registered email id" class="form-control" required />
+                                        <!-- <div *ngIf="!email.valid" class="help-block">Please enter a valid email</div> -->
+                                    </div>
+                                    <div class="form-group">
+                                        <button *ngIf="!forgetPwd" type='submit' [disabled]="loading" class="btn btn-primary btn-background">Login</button>
+                                        <button *ngIf="forgetPwd" type='button' (click)="sendPwdToMail(regMail)" class="btn btn-primary btn-background">Submit</button>
+                                        <a (click)="forgetPwd=!forgetPwd" style="margin-left: 5px;" >{{ !forgetPwd ? "Forget password ?" : "Back to Login" }}</a>
+                                    </div>
+                                </form>
+                       
+                            </div>
+                            <div class="tab-pane" id="tab_signup_default_2">
+                                <form (ngSubmit)="registerUser(signUpForm.value, signUpForm.valid)" [formGroup]="signUpForm" novalidate>
+                                    <!-- MOBILE -->
+                                    <div class="form-group">
+                                        <label class="required">Contact Number</label>
+                                        <input formControlName="contactnumber" class="input" id="user_name" placeholder="Your contact number" type="number" id="mobileNum" name="mobile" class="form-control" required>
+                                        <small [hidden]="signUpForm.controls.contactnumber.valid || (signUpForm.controls.contactnumber.pristine && !isRegistrationsFormSubmitted)" class="text-danger">
+                                            Your Contact Number is required.
+                                        </small>
+                                    </div>
+                                    <!-- EMAIL -->
+                                    <div class="form-group">
+                                        <label class="required">Email</label>
+                                        <input id="emailID" placeholder="Your EmailID" type="email" formControlName="email" class="form-control">
+                                        <!--<span *ngIf="signUpForm.hasError('email', 'email')">
+                                            Please enter the correct email, this email not valid.
+                                        </span>-->
+                                        <small [hidden]="signUpForm.controls.email.valid || (signUpForm.controls.email.pristine && !isRegistrationsFormSubmitted)" class="text-danger">
+                                            Please enter the correct email, this email not valid.
+                                        </small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Are you a Seller ? </label>
+                                        <div class="input-group pull-right" style='display:inline-block'>
+                                            <div id="radioBtn" class="btn-group">
+                                                <a class="btn btn-primary btn-sm notActive" (click)='getIsSellerCheckboxInput($event)' data-toggle="happy" data-title="Y">YES</a>
+                                                <a class="btn btn-primary btn-sm active" (click)='getIsSellerCheckboxInput($event)' data-toggle="happy" data-title="N">NO</a>
+                                            </div>
+                                        </div>
+                                        <!--<p ng-show="registrationForm.email.$invalid && !registrationForm.email.$pristine" class="help-block">Enter a valid email.</p>-->
+                                    </div>
+                                    <div class="form-group" *ngIf='isSeller'>
+                                        <label>Location </label>
+                                        <div class="input-group pull-right" style='display:inline-block'>
+                                            <div id="radioBtn" class="btn-group">
+                                                    <a class="btn btn-primary btn-sm active" (click)='selectLocationChoices($event)' data-toggle="fun" data-title="Y">From Google Maps</a>
+                                                    <a class="btn btn-primary btn-sm notActive" (click)='selectLocationChoices($event)'>Manual entry</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" *ngIf='isSeller'>
+                                        <div style="width:100%;" *ngIf="pickMapLocation">
+                                            <map-markers></map-markers>
+                                        </div>
+                                        <div *ngIf="!pickMapLocation">
+                                            <span style="padding-left: 15px;">Enter address only if you can not find your address in maps</span>
+                                            <div class="form-group">
+                                                <div style="margin-top: 10px;" [ngClass]="{ 'has-error': f.submitted }">
+                                                    <label class="required">Address </label>
+                                                    <input type="text" formControlName="address" placeholder="Complete address here" name="name" class="form-control" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-6" style="margin-top: 10px;padding-left: 0px;" [ngClass]="{ 'has-error': f.submitted }">
+                                                    <label class="required">City</label>
+                                                    <input type="text" formControlName="city" name="name" class="form-control" placeholder="City" required>
+                                                </div>
+                                                <div class="col-md-6" style="margin-top: 10px;padding-right: 0px;" [ngClass]="{ 'has-error': f.submitted }">
+                                                    <label class="required">Zip/Pin Code </label>
+                                                    <input type="text" placeholder="Zip code" formControlName="zip" name="name" class="form-control" pattern="[0-9]*" maxlength="6" required>
+                                                </div>
+                                            </div>                            
+                                        </div>
+                                    </div>                                            
+                                    <!-- NAME -->
+                                    <div class="form-group" *ngIf='isSeller'>
+                                        <label class="required">Shop Name</label>
+                                        <input type="text" formControlName="shopname" placeholder="Shop Name" name="name" class="form-control" required>
+                                        <small [hidden]="signUpForm.controls.shopname.valid || (signUpForm.controls.shopname.pristine && !isRegistrationsFormSubmitted)" class="text-danger">
+                                            Your Shop Name is required (minimum 3 characters).
+                                        </small>
+                                    </div>
+                                    <div class="form-group" *ngIf='isSeller'>
+                                        <label>Group/Shop Owner Name</label>
+                                        <input type="text" formControlName="ownername" placeholder="Shop Owner Name" name="name" class="form-control">
+                                        <!--<p ng-show="registrationForm.name.$invalid && !registrationForm.name.$pristine" class="help-block">Your name is required.</p>-->
+                                    </div>
+                                    <div class="form-group" *ngIf='isSeller'>
+                                            <label>Website if Any</label>
+                                            <input type="text" formControlName="website" placeholder="Shop Owner Name" name="name" class="form-control">
+                                            <!--<p ng-show="registrationForm.name.$invalid && !registrationForm.name.$pristine" class="help-block">Your name is required.</p>-->
+                                        </div>
+                                    <div class="form-group" *ngIf='isSeller'>
+                                        <label>Working Hours</label>
+                                        <input type="text" formControlName="working_hours" placeholder="Working Hours" name="name" class="form-control">
+                                        <!--<p ng-show="registrationForm.name.$invalid && !registrationForm.name.$pristine" class="help-block">Your name is required.</p>-->
+                                    </div>
+                                    <!-- Password -->
+                                    <div class="form-group">
+                                        <label class="required">Password</label>
+                                        <input formControlName="password" id="user_pass" placeholder="Your Password" type="password" name="password" class="form-control" required>
+                                        <small [hidden]="signUpForm.controls.password.valid || (signUpForm.controls.password.pristine && !isRegistrationsFormSubmitted)" class="text-danger">
+                                            Your password is required.
+                                        </small>
+                                        <!--<p ng-show="registrationForm.password.$invalid && !registrationForm.password.$pristine" class="help-block">Your password is required.</p>-->
+                                    </div>                                            
+                                    <div class="row">
+                                        <div>
+                                            <button type="submit" class="btn btn-primary btn-sm btn-background" [disabled]="signUpForm.controls.isValid">
+                                                Save & Continue
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-sm btn-background">
+                                                Reset
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <!-- <div class="row text-center sign-with">
+                    <div class="col-md-12">
+                        <h3>Sign in with</h3>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="btn-group btn-group-justified">
+                            <a style="color: #e1e1e1;" 
+                                (click)="loginWithFb()" 
+                                class="btn btn-primary btn-background">
+                                Facebook
+                            </a> 
+                            <a style="color: #e1e1e1;" 
+                                (click)="loginWithGmail()"
+                                class="btn btn-danger btn-background">
+                                Google
+                            </a>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </ion-scroll>
+</ion-content>
+<!--<ion-footer>
+    <button ion-button full color="danger" (click)="dismiss()">Okay</button>
+</ion-footer>-->

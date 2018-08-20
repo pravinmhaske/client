@@ -1,0 +1,65 @@
+<ion-header >
+    <div id="flipkart-navbar">
+        <div class="row">
+            <div class="col-md-1" *ngIf="!isMobile">
+                <img src="../assets/img/logo/logo.png" 
+                height="30px" width="100%" style="margin-top: 7px;"/>
+            </div>
+            <div class="col-md-4 col-sm-12 col-xs-12 row2" *ngIf="isMobile">
+                <ion-navbar>
+                    <button ion-button menuToggle>
+                        <ion-icon name="menu"></ion-icon>
+                    </button>
+                    <ion-title *ngIf="isMobile">About us</ion-title>
+                </ion-navbar>
+            </div>
+            <div class="col-md-7" style="padding-top: 11px" *ngIf="!isMobile">
+                <ul class="largenav pull-left" *ngFor="let item of appMenuItems">
+                    <li class="upper-links" *ngIf="((item.title==='Logout') && isUserLoggedIn)">
+                        <a class="links" (click)="openPage(item)"><ion-icon item-left [name]="item.icon" style="margin-right: 5px;"></ion-icon>{{item.title}}</a>
+                    </li>
+                    <li class="upper-links" *ngIf="(((item.title==='My Profile')) && isUserLoggedIn && isSeller)">
+                        <a class="links" (click)="openPage(item)"><ion-icon item-left [name]="item.icon" style="margin-right: 5px;"></ion-icon>{{item.title}}</a>
+                    </li>
+                    <li class="upper-links" *ngIf="(item.title!=='Logout' && item.title!=='Wish list' && item.title!=='Login'  && item.title!=='My Profile' && item.title!=='My Products')">
+                        <a class="links" (click)="openPage(item)"><ion-icon item-left [name]="item.icon" style="margin-right: 5px;"></ion-icon>{{item.title}}</a>
+                    </li>
+                    <li class="upper-links" *ngIf="(item.title==='Wish list' && !isSeller)">
+                        <a class="links" (click)="openPage(item)"><ion-icon item-left [name]="item.icon" style="margin-right: 5px;"></ion-icon>{{item.title}}</a>
+                    </li>
+                    <li class="upper-links" *ngIf="(item.title==='Login' && !isUserLoggedIn)">
+                        <a class="links" (click)="openPage(item,$event)"><ion-icon item-left [name]="item.icon" style="margin-right: 5px;"></ion-icon>{{item.title}}</a>
+                    </li>
+                    <li class="upper-links" *ngIf="(((item.title==='My Products'|| item.title==='Seller Page')) && isUserLoggedIn && isSeller)">
+                        <a class="links" (click)="openPage(item)"><ion-icon item-left [name]="item.icon" style="margin-right: 5px;"></ion-icon>{{item.title}}</a>
+                    </li>   
+                </ul>
+            </div>
+        </div>
+    </div>
+</ion-header>
+<ion-content>
+    <div class="about-header">
+        <img src="assets/img/dreamhouse-logo.svg">
+    </div>
+    <div padding class="about-info">
+        <h4>Selomart</h4>
+        <p style="font-size:1.1em">
+            Selomart is the free online platform for connecting buyers with sellers and suppliers. Buyers can check the product availability and connect with the sellers on this Platform, wheares sellers can manage their products and profile.<br/><br/>
+            
+            Selomart will not be responsible for  mis-representation of products and services, fraudulent schemes, unsatisfactory quality, failure to meet specifications, defective or dangerous products, unlawful products, delay or default in delivery or payment, cost mis-calculations, breach of warranty, breach of contract and transportation accidents.
+            <br/><br/>
+            Seller is solely resposible for the shop and products information.
+        </p>
+    </div>
+    <div>
+        <div>
+            <h4>Anil Bansode</h4>
+            <div>8793124147</div>
+        </div>
+        <div>
+            <h4>Pravin Mhaske</h4>
+            <div>9623044643</div>
+        </div>
+    </div>
+</ion-content>

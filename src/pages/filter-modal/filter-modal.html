@@ -1,0 +1,44 @@
+<ion-header class="row">
+	<button class="col-xs-4" style="border: 1px solid;" ion-button block (click)="closeFilterModal()">Close</button>
+	<button class="col-xs-4" style="border: 1px solid;" ion-button block (click)="clearFilters()">Reset</button>
+	<button class="col-xs-4" style="border: 1px solid;" ion-button block (click)="applyFilter()">Apply </button>
+</ion-header>
+
+<!--
+<ion-content> 
+  <form id="filterForm">
+    <div *ngFor="let filterOption of filterOptions" style="padding: 10px 15px;">
+      <h4>{{filterOption.name}}</h4>
+      <div *ngFor="let value of filterOption.value" class="filter-box">
+        <div *ngIf="filterOption.type != 'color'" class="non-color-box">
+          <input style="margin:5px;" type="checkbox" (click)="addToFilter(filterOption.spec, value, $event)"/>
+          <span style="margin-right:8px;">{{value}}</span>
+        </div>
+        <input *ngIf="filterOption.type == 'color'" type="checkbox" (click)="addToFilter(filterOption.spec, value, $event)"
+          [style.background-color]="value" class="color-checkbox" />
+      </div>
+    </div>
+  </form> 
+</ion-content>
+-->
+<ion-content *ngIf="filterOptions" class="filter-modal">
+  <div *ngFor="let filterOption of filterOptions">
+    <div (click)="filterOption.hide = !filterOption.hide ? true : false" class="cat-filter-label">
+      <label>{{filterOption.name}}</label>
+      <span class="glyphicon glyphicon-menu-up" *ngIf="filterOption.show"></span>
+      <span class="glyphicon glyphicon-menu-down" *ngIf="!filterOption.show"></span>
+    </div>
+    <div [hidden]="filterOption.hide">
+      <div *ngFor="let option of filterOption.value" class="cat-filter-options">
+        <div *ngIf="filterOption.type === 'color'" class="filter-item-color" (click)="addProductFilters($event); option.isselected=!option.isselected"
+          [style.background-color]="option.val">
+        </div>
+        <div *ngIf="filterOption.type === 'checkbox' || filterOption.type == 'radio'" 
+          class="filter-item-checkbox" (click)="addProductFilters($event); 
+          option.isselected=!option.isselected">
+          <span *ngIf="filterOption.type != 'color'">{{option.val}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,24 @@
+<div >
+    <!-- <div class="form-group" style="display: flex;">
+        <input 
+            placeholder="search for location" 
+            autocorrect="off" 
+            autocapitalize="off" 
+            spellcheck="off" 
+            type="text" 
+            class="form-control" 
+            #search 
+            [formControl]="searchControl">
+        <button type="button" class="btn-background" (click)="pickMyCurrentLocation(null,null)">
+          
+            <ion-icon class="search-bar-icon" name="pin"></ion-icon>
+        </button>
+    </div> -->
+    <div *ngIf="outletsData[0].location" id="sellerOutlets" style="height: 250px; width: 100%;"></div>
+    <div *ngIf="!outletsData[0].location && outletsData.length !== 1">Shop Location is not available</div>
+    <div *ngIf="!outletsData[0].location && outletsData.length === 1">
+        {{outletsData[0].address}}, {{outletsData[0].city}}- {{outletsData[0].zip}}
+        <div>Edit Seller details to add google map location</div>
+    </div>
+</div>
+

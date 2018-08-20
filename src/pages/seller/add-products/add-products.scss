@@ -1,0 +1,165 @@
+label {
+	text-transform: capitalize;
+	margin-bottom: 0 !important;
+}
+.left-container:nth-child(odd) {
+    padding: 0;
+}
+.left-container:nth-child(even) {
+    padding: 0 15px !important;
+}
+
+.inline-block-element{
+    display: inline-block !important;
+}
+.color-box-container {
+	margin: 5px 0;
+}
+.color-box > div {
+	height: 1.5em;
+	display: inline-block;
+    width: 1.5em;
+    border: 1px solid;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.checkbox-container {
+	margin: 5px 0;
+}
+.checkbox-container>div {
+	padding: 0 0 3px 0px;
+}
+.checkbox-chip {
+    line-height: 2em;
+    border-radius: 0;
+    height: auto;
+    padding: 0px 5px 3px 5px;
+    margin: 0 10px 2px 0;
+    background-color: transparent;
+    border: 1px solid #ccc;
+
+    input {
+		height: 1.2em;
+	    width: 2em;
+	    margin-right: 2px;
+    }
+}
+.radio-chip {
+	padding: 0 5px;
+    margin: 0 10px 0 0;
+    line-height: 2.2em;
+    background-color: transparent;
+    border: 1px solid #ccc;
+
+    input {
+	    height: 1.5em;
+	    width: 1.5em;
+	    margin: 5px 5px 0 0;
+    }
+}
+.radio-chip > input {
+    height: 1.5em;
+    width: 1.5em;
+    margin: 5px 5px 0 0;
+}
+
+// .form-container {
+//     display:block;
+//     width:90%;
+//     padding:2em;
+//     margin: 2em auto;
+//     background:#fff;
+// }
+
+// .alert {
+//     background: #f2edda;
+//     padding: 7px;
+//     font-size: .9em;
+//     margin-bottom: 20px;
+//     display: inline-block;
+//     animation: 2s alertAnim forwards;
+// }
+
+// .button {
+//     margin-top: 3rem;
+// }
+// h1 {
+//     margin-bottom: 2rem;
+//     font-weight:bold;
+//     font-family:'Muli';
+//     font-size: 2em;
+// }
+
+
+// @keyframes alertAnim {
+//     from {
+//         opacity:0;
+//         transform: translateY(-20px);
+//     }
+//     to {
+//         opacity:1;
+//         transform: translateY(0);
+//     }
+// }
+.searchable-container{margin:20px 0 0 0}
+.searchable-container label.btn-default.active{background-color:#007ba7;color:#FFF}
+.searchable-container label.btn-default{width:90%;border:1px solid #efefef;margin:5px; box-shadow:5px 8px 8px 0 #ccc;}
+.searchable-container label .bizcontent{width:100%;}
+.searchable-container .btn-group{width:90%}
+.searchable-container .btn span.glyphicon{
+    opacity: 0;
+}
+.searchable-container .btn.active span.glyphicon {
+    opacity: 1;
+}
+
+.selo-color{
+background: #0a6526 !important;
+    color: #FFF !important;
+}
+
+.btn-primary.active, .btn-primary:active, .open>.dropdown-toggle.btn-primary {
+    background: #0a6526 !important;
+    color: #FFF !important;
+}
+.c-token{
+    margin: 3px 0 3px 0;
+}
+
+.form-group input[type="checkbox"] {
+    display: none;
+}
+
+.form-group input[type="checkbox"] + .btn-group > label span {
+    width: 20px;
+}
+
+.form-group input[type="checkbox"] + .btn-group > label span:first-child {
+    display: none;
+}
+.form-group input[type="checkbox"] + .btn-group > label span:last-child {
+    display: inline-block;   
+}
+
+.form-group input[type="checkbox"]:checked + .btn-group > label span:first-child {
+    display: inline-block;
+}
+.form-group input[type="checkbox"]:checked + .btn-group > label span:last-child {
+    display: none;   
+}
+.checkbox-container  .checkbox-chip.chip.chip-md label{
+cursor: pointer;
+}
+.mandatory-star{
+ color:red;
+  }
+//   .discount{
+//     padding-left: 0px;
+//   }
+
+//   @media only screen and (max-width: 600px) {
+//     .discount{
+//         padding-left: 15px;
+//       }
+// }

@@ -1,0 +1,31 @@
+<ion-header class="row">
+	<div class="col-sm-12 col-xs-12 row2" (click)="goBack()">
+		<ion-navbar>
+			<ion-title>
+				<ion-icon name="arrow-round-back"></ion-icon>
+				&nbsp;&nbsp;{{groupname}}
+			</ion-title>
+		</ion-navbar>
+	</div>
+</ion-header>
+
+<ion-content>
+	<ion-card *ngFor="let category of categorisedData" class="category">
+		<header class="heading row">
+			<div (click)="openCat = openCat!=category.catname?category.catname:undefined">
+				<span *ngIf="openCat===category.catname" class="glyphicon glyphicon-menu-down"></span>
+				<span *ngIf="openCat!==category.catname" class="glyphicon glyphicon-menu-right"></span>
+				<span>{{category.catname}}</span>
+			</div>
+			<div class="right-aligned" (click)="selectCat(category)">All</div>
+		</header>
+		<div *ngIf="openCat == category.catname" style="display:inline-block;padding: 0 5px;" class="col-sm-12 col-xs-12">
+			<div class="subcat-input col-sm-4 col-xs-4"
+			*ngFor="let subCategory of category.subcategories"
+			(click)="selectSubCat(category.catname, subCategory)">
+				<img src="{{subCategory.icon}}" height="75px" width="auto" />
+				<div>{{subCategory.name}}</div>
+			</div>
+		</div>
+	</ion-card>
+</ion-content>

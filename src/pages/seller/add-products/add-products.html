@@ -1,0 +1,185 @@
+<div>
+    <form  [formGroup]="myForm" novalidate (ngSubmit)="saveProduct(myForm.value, myForm.valid);" enctype="multipart/form-data">
+        <div class="form-group">
+            <div class="col-md-12" style="margin-top: 10px;">
+                <label for="">Outlet / Branch  <span class="mandatory-star">*</span></label>
+                <angular2-multiselect  required [data]="outletsList" [(ngModel)]="selectedItems" [ngModelOptions]="{standalone: true}" [settings]="dropdownSettings"></angular2-multiselect>
+
+                <small *ngIf="selectedItems.length==0 && submitted" class="form-text text-muted dange text-danger">You must select an outlet/s.</small>
+            </div>
+
+        </div>
+        <div class="form-group" formGroupName="category">
+            <div class="col-md-6" style="margin-top: 10px;" *ngIf="!showStaticCat">
+                <label for="">Category <span class="mandatory-star">*</span></label>
+                <select *ngIf="categoryList" class="form-control" formControlName="catname" (change)="onCategoryChange(myForm.controls.category.value.catname,$event.target)">
+                    <option [attr.selected]="product === undefined ? true : null" selected>Select Category</option>
+                    <option [attr.selected]=" product !== undefined ? ( category.catId == product.catId ? true : null) : null" [attr.value]='category.catId'
+                        *ngFor="let category of categoryList">
+                        {{category.catname}}
+                    </option>
+                </select>
+                <small *ngIf="(submitted && !myForm.controls.category.controls.catname.valid) || (!myForm.controls.category.controls.catname.valid && myForm.controls.category.controls.catname.dirty) ">Required (Please select country).</small>
+                <!--<input type="text" class="form-control" name="category" formControlName="catname">-->
+                <small *ngIf="!categorySelected && submitted" class="form-text text-muted dange text-danger">Please select Category.</small>
+            </div>
+            <div class="col-md-6" style="margin-top: 10px;" *ngIf="showStaticCat && product">
+                <div class="form-control">{{product.category}}</div>
+            </div>
+            <div class="col-md-6" style="margin-top: 10px;" *ngIf="!showStaticCat">
+                <label for="">Subcategory  <span class="mandatory-star">*</span></label>
+                <select class="form-control" formControlName="subcatname" (change)="onSubCategoryChange(myForm.controls.category.value.subcatname,$event)">
+                    <option [attr.selected]="product === undefined ? true : null">Select Sub-Category</option>
+                    <option [attr.selected]=" product !== undefined ? (subCategory.subcatId == product.subcatId ? true : null) : null" *ngFor="let subCategory of subCategoryList"
+                        [attr.value]="subCategory.subcatId">
+                        {{subCategory.name}}
+                    </option>
+                </select>
+                <small *ngIf="!subCataegorySelected && submitted" class="form-text text-muted dange text-danger">Please select Sub Category.</small>
+            </div>
+            <div class="col-md-6" style="margin-top: 10px;" *ngIf="showStaticCat && product">
+                <div class="form-control">{{product.subcategory}}</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-6" style="margin-top: 10px;">
+                <label for="">Name  <span class="mandatory-star">*</span></label>
+                <input type="text" class="form-control" formControlName="name" placeholder="Product/Service Name">
+                <small [hidden]="myForm.controls.name.valid || (myForm.controls.name.pristine && !submitted)" class="text-danger">
+                    Product name is required (minimum 3 characters).
+                </small>
+            </div>
+            <div class="col-md-6" style="margin-top: 10px;">
+                <label for="">Brand(Company Name)</label>
+                <input type="text" class="form-control" formControlName="brand" placeholder="Brand/Company Name">
+                <!-- <small [hidden]="myForm.controls.brand.valid || (myForm.controls.brand.pristine && !submitted)" class="text-danger">Product Brand(Company Name) is required (minimum 3 characters). </small> -->
+
+            </div>
+        </div>
+
+        <div class="margin-20 col-md-12" *ngIf="filters">
+            <div *ngFor="let filter of filters;let i = index" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div *ngIf="filter.type == 'checkbox'" class="checkbox-container">
+                    <label for="">{{filter.name}}</label>
+                    <div>
+                        <ion-chip *ngFor="let obj of filter.value;let ind = index" class="checkbox-chip">
+                            <label>  <input name={{filter.name}} type="checkbox" [checked]="obj.isselected" (change)="selectProductSpecification(obj,i,$event)" />{{obj.val}}</label>            
+                        </ion-chip>
+                    </div>
+                </div>
+                <div *ngIf="filter.type == 'radio'" class="checkbox-container">
+                    <label for="">{{filter.name}}</label>
+                    <div>
+                        <ion-chip radio-group *ngFor="let obj of filter.value" class="checkbox-chip">
+                            <label>  
+                                <input name={{filter.name}} type="radio" 
+                                [checked]="obj.isselected" 
+                                (change)="selectProductSpecification(obj,i,$event)" />
+                                {{obj.val}}</label>         
+                        </ion-chip>
+                    </div>
+                </div>
+                <div *ngIf="filter.type == 'color'" class="color-box-container">
+                    <label>{{filter.name}}</label>
+                    <ion-chip *ngFor="let obj of filter.value" class="checkbox-chip" [style.background-color]="obj.val">
+                        <input type="checkbox"  [checked]="obj.isselected" (change)="selectProductSpecification(obj,i,$event)" />
+                    </ion-chip>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-6" style="margin-top: 10px;">
+                <label for="">Original price <span class="mandatory-star">*</span></label>
+                <input type="number" class="form-control" (blur)="onOfferBlur('originalprice')" formControlName="price" min="0" placeholder="Price in rupees">
+                <small [hidden]="myForm.controls.price.valid || (myForm.controls.price.pristine && !submitted)" class="text-danger">Price is required.
+                </small>
+            </div>
+            <div class="col-md-6" style="margin-top: 10px;">
+                <div class="col-md-6" style="padding-left: 0px;">
+                    <label for="">Discount (in %)</label>
+                    <input type="number" (blur)="onOfferBlur('percentage')" placeholder="Discount" class="form-control" min="0" formControlName="discount">
+                    <small [hidden]="myForm.controls.discount.valid || (myForm.controls.discount.pristine && !submitted)" class="text-danger">Enter discount on the product.</small>
+
+                </div>
+                <div class="col-md-6" style="padding-right:0px;">
+                    <label for="">Discounted/Final Price</label>
+                    <input type="number" (blur)="onOfferBlur('discounedprice')" placeholder="Discounted Price" class="form-control" min="0" formControlName='discountedPrice'>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-6" style="margin-top: 10px;">
+                <label for="">Home Delivery/Service Available</label>
+                <div class="input-group pull-right">
+                    <div id="radioBtn" class="btn-group">
+                        <a [ngClass]="(product!==undefined)?((product.is_home_delivery==true)?'active':'notActive'):'notActive'" class="btn btn-primary btn-sm"
+                            (click)='getIsHomeDeliveyAvailableInput($event)' data-toggle="happy" data-title="Y">YES</a>
+                        <a [ngClass]="(product!==undefined)?((product.is_home_delivery!=true)?'active':'notActive'):'active'" class="btn btn-primary btn-sm"
+                            (click)='getIsHomeDeliveyAvailableInput($event)' data-toggle="happy" data-title="N">NO</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6" style="margin-top: 10px;" *ngIf="isHomeDeliveryAvailabe">
+
+                <div class="col-md-6" style="padding-left: 0px;">
+                    <label for="">Within Range (in Kms)</label>
+                    <input type="number" class="form-control" formControlName="range" min="0" value="10" placeholder='Home delivery range'>
+                </div>
+                <div class="col-md-6" style="padding-right:0px;">
+                    <label for="">Charges(If any per Km)</label>
+                    <input type="number" class="form-control" formControlName="homeDeliveryCharge" min="0" value="10" placeholder='charges for home delivery'>
+
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-12" style="margin-top: 10px;">
+                <label for="comment">Additional Info:</label>
+                <textarea class="form-control" rows="5" formControlName="otherspecifications" id="comment" placeholder="Enter new feature on new line"></textarea>
+            </div>
+
+        </div>
+        <div class="form-group">
+
+            <div class="col-md-6">
+                <label for="">Image Upload </label>
+                <div>
+                    <ion-card-content>
+                        <div class="form-group" >
+                            <img-cropper [image]="data1" [settings]="cropperSettings1" (onCrop)="cropped($event)"></img-cropper>
+
+                        </div>
+                    </ion-card-content>
+                </div>
+                <!--<input name="file" type="file" (change)="handleInputChange($event)">-->
+                <input type="hidden" name="fileHidden" formControlName="prodImg" />
+                <!-- <small [hidden]="myForm.controls.prodImg.valid || (myForm.controls.prodImg.pristine && !submitted)" class="text-danger">Upload product image.
+                </small> -->
+                <!--<input type="file" accept="image/*" formControlName="prodImg"  (change)="handleInputChange($event,myForm.controls.prodImg)" />-->
+            </div>
+            <div class="col-md-6" style="margin-top:50px;">
+                <span class="result" *ngIf="data1 && data1.image">
+                    <img [src]="data1.image" style="min-height:200px;max-height:350px;min-width:200px;max-width:350px;">
+                    <!-- <img [src]="data1.image"
+                            [width]="croppedWidth"
+                            [height]="croppedHeight"> -->
+                </span>
+                <img *ngIf="(product!==undefined) && !isProductImageUploaded" src="{{product.img}}" style='width:100%;height:100%' alt="">
+
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-12" style="margin-top: 10px;">
+
+                <button type="submit" class="btn btn-primary selo-color">Submit</button>
+            </div>
+
+        </div>
+
+    </form>
+</div>
