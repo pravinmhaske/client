@@ -1,0 +1,15 @@
+
+const PROXY_CONFIG = [
+    {
+        context: [
+            "/seller-details",
+            "/add-product",
+            "/get-products",
+            "/user-registration"
+        ],
+        target: "http://localhost:8080",
+        secure: false
+    }
+]
+
+module.exports = PROXY_CONFIG;
