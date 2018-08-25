@@ -19,7 +19,6 @@ npm-debug.log*
 coverage/
 dist/
 node_modules/
-www/
 tmp/
 temp/
 hooks/
@@ -35,4 +34,4 @@ UserInterfaceState.xcuserstate
 
 .sourcemaps/
 package-lock.json
-
+www/
