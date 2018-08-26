@@ -38,7 +38,7 @@ import { FacebookModule } from 'ngx-facebook';
 /* provider */
 import {
   SellerService, AddProductsSpecification, CachedSellerService, CategoriesService,
-  LocationDetails, LoginService, PagerService, ProductsService, SetGetUser
+  LocationDetails, LoginService, PagerService, ProductsService, SetGetUser,ToastMessage
 } from "../providers/index";
 /* pipes */
 import { OrderByPipe, SearchPipe, TitleCasePipe } from '../pipes/index';
@@ -105,7 +105,7 @@ import { OrderByPipe, SearchPipe, TitleCasePipe } from '../pipes/index';
     LocationDetails,
     LoginService,
     Geolocation,
-    PagerService,CategoriesService,
+    PagerService,CategoriesService,ToastMessage,
     // CallNumber,
     { provide: APP_CONFIG, useValue: AppConfig },
     { provide: ErrorHandler, useClass: IonicErrorHandler }
