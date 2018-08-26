@@ -42,7 +42,7 @@ export class ProductsService {
     loading.present();
 //    return this.http.get(this.localhost + this.endpoints.productsList + shopId,new RequestOptions({ headers: this.headers }))
       // return this.http.get("http://localhost:3000/get-products/?productid="+ shopId+"&pageNumber="+pageNumber,new RequestOptions({ headers: this.headers }))
-  return this.http.get(this.localhost + this.endpoints.productsList+"/?productid="+ shopId+"&pageNumber="+pageNumber,new RequestOptions({ headers: this.headers }))
+  return this.http.get(this.localhost + this.endpoints.productsList+"/?shopId="+ shopId+"&pageNumber="+pageNumber,new RequestOptions({ headers: this.headers }))
       .map(response => {
         return response.json();
       })

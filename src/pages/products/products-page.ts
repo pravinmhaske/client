@@ -121,7 +121,7 @@ export class ProductsPage implements OnInit {
     this.events.publish('user:userdetails', loggedInUserDetails);
   }
   getCategoriesData() {
-    let responseData: any;
+    // let responseData: any;
     let toast = this.toastCtrl.create({
       message: '', cssClass: 'mytoast', duration: 2000
     });
@@ -175,35 +175,10 @@ export class ProductsPage implements OnInit {
       //      }
     }, err => this.handleError(err))
   }
-  getProducts() {
-    console.log("in get products");
-    let userDetails = this.userGetterSetter.getLoginUser();
-    if (userDetails && userDetails.loggedInUserDetails.isSeller && this.cachedSellerDetails.getShopInfo()) {
-      this.productService.getAllProducts(userDetails.loggedInUserDetails.shopId, this.pageNumber).subscribe((response) => {
-        // if(response && response.productsList && response.productsList.length>0) {
-        //   this.products = response.productsList;
-        //   this.allProducts = JSON.parse(JSON.stringify(response.productsList));
-        //   this.filterOptionsBckup = undefined;
-        //   this.productsBckup = undefined;
-        // }
-        if (response.success && response.productsList.length > 0) {
-          this.products = response.productsList;
-          this.allProducts = JSON.parse(JSON.stringify(response.productsList));
-          this.filterOptionsBckup = undefined;
-          this.productsBckup = undefined;;
-          this.filterApplied = false;
-          this.paginationModelTotCount = response.totalItems;
 
-        } else if (response.productsList.length === 0) {
-          console.log("Sorry No Products available");
-
-        } else if (!response.success) {
-          console.log("Something went wrong");
-
-        }
-      });
-    } else {
-      this.productService.getAllProducts('-', this.pageNumber).subscribe((response) => {
+  getProducts(shopId="-") {
+   
+      this.productService.getAllProducts(shopId, this.pageNumber).subscribe((response) => {
         if (response.success && response.productsList.length > 0) {
           this.products = response.productsList;
           this.allProducts = JSON.parse(JSON.stringify(response.productsList));
@@ -218,15 +193,62 @@ export class ProductsPage implements OnInit {
           console.log("Something went wrong");
 
         }
-        // if(response && response.productsList && response.productsList.length>0) {
-        //   this.products = response.productsList;
-        //   this.allProducts = JSON.parse(JSON.stringify(response.productsList));
-        //   this.filterOptionsBckup = undefined;
-        //   this.productsBckup = undefined;
-        // }
       });
-    }
+    
   }
+
+  // getProducts() {
+  //   console.log("in get products");
+  //   let userDetails = this.userGetterSetter.getLoginUser();
+  //   if (userDetails && userDetails.loggedInUserDetails.isSeller && this.cachedSellerDetails.getShopInfo()) {
+  //     this.productService.getAllProducts(userDetails.loggedInUserDetails.shopId, this.pageNumber).subscribe((response) => {
+  //       // if(response && response.productsList && response.productsList.length>0) {
+  //       //   this.products = response.productsList;
+  //       //   this.allProducts = JSON.parse(JSON.stringify(response.productsList));
+  //       //   this.filterOptionsBckup = undefined;
+  //       //   this.productsBckup = undefined;
+  //       // }
+  //       if (response.success && response.productsList.length > 0) {
+  //         this.products = response.productsList;
+  //         this.allProducts = JSON.parse(JSON.stringify(response.productsList));
+  //         this.filterOptionsBckup = undefined;
+  //         this.productsBckup = undefined;;
+  //         this.filterApplied = false;
+  //         this.paginationModelTotCount = response.totalItems;
+
+  //       } else if (response.productsList.length === 0) {
+  //         console.log("Sorry No Products available");
+
+  //       } else if (!response.success) {
+  //         console.log("Something went wrong");
+
+  //       }
+  //     });
+  //   } else {
+  //     this.productService.getAllProducts('-', this.pageNumber).subscribe((response) => {
+  //       if (response.success && response.productsList.length > 0) {
+  //         this.products = response.productsList;
+  //         this.allProducts = JSON.parse(JSON.stringify(response.productsList));
+  //         this.filterOptionsBckup = undefined;
+  //         this.productsBckup = undefined;
+  //         this.filterApplied = false;
+  //         this.paginationModelTotCount = response.totalItems;
+  //       } else if (response.productsList && response.productsList.length === 0) {
+  //         console.log("Sorry No Products available");
+
+  //       } else if (!response.success) {
+  //         console.log("Something went wrong");
+
+  //       }
+  //       // if(response && response.productsList && response.productsList.length>0) {
+  //       //   this.products = response.productsList;
+  //       //   this.allProducts = JSON.parse(JSON.stringify(response.productsList));
+  //       //   this.filterOptionsBckup = undefined;
+  //       //   this.productsBckup = undefined;
+  //       // }
+  //     });
+  //   }
+  // }
 
   userLogin(event) {
     event.preventDefault();
@@ -243,11 +265,11 @@ export class ProductsPage implements OnInit {
     //   this.navCtrl.push(ProductDetailsPage, { product, specifications: this.specifications });
     // });
   }
-  getAllProducts() {
-    this.products = this.allProducts;
-    this.filterApplied = false;
-    this.filterOptions = [];
-  }
+  // getAllProducts() {
+  //   this.products = this.allProducts;
+  //   this.filterApplied = false;
+  //   this.filterOptions = [];
+  // }
   getProductAvgRate(rating: string) {
     if (rating) {
       return Math.round(((rating.split(',').reduce(function (a, b) {
@@ -648,11 +670,13 @@ export class ProductsPage implements OnInit {
       event.stopPropagation();
     } else if (page.title === "My Products") {
       let seller = this.userGetterSetter.getLoginUser();
-      this.cachedSellerDetails.setShopInfo(seller.loggedInUserDetails.shopId);
-      if (seller.loggedInUserDetails.isSeller) {
-        this.cachedSellerDetails.setShopInfo(seller.loggedInUserDetails.isSeller);
-        this._app.getRootNav().setRoot(ProductsPage);
-      }
+      this.getProducts(seller.loggedInUserDetails.shopId);
+      
+      // this.cachedSellerDetails.setShopInfo(seller.loggedInUserDetails.shopId);
+      // if (seller.loggedInUserDetails.isSeller) {
+      //   this.cachedSellerDetails.setShopInfo(seller.loggedInUserDetails.isSeller);
+      //   this._app.getRootNav().setRoot(ProductsPage);
+      // }
     } else {
       this._app.getRootNav().setRoot(page.component);
     }
