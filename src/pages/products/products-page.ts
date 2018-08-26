@@ -91,7 +91,11 @@ export class ProductsPage implements OnInit {
   }
   ngOnInit() {
     this.getProducts();
-    this.getCategoriesData();
+    this.categories=this._categoryService.getCategoryData();
+    if(!this.categories){
+      this.getCategoriesData();
+    }
+    
     //    this.productService.getSpecifications().subscribe(response => {
     //      if (response) this.specifications = response;
     //    });
