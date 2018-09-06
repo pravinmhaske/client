@@ -30,6 +30,7 @@ export const AppConfig: IAppConfig = {
     likeProduct:'like-product',
    //sellers endpoints
    sellerDetails: 'seller-details',
+   likeSeller:'like-seller',
    //login
    loginUser: 'login',
    registerUser: 'registration'

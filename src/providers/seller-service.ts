@@ -78,5 +78,17 @@ return this.http.get(this.localhost + this.endpoints.sellerDetails+"?sellerid="+
       .finally(() =>loading.dismiss())
   }
 
+  likeSeller(userId): Observable<any> {
+    let loading = this.loadingCtrl.create();
+    loading.present();
+    return this.http.post(this.localhost + this.endpoints.likeSeller,{userId:userId},new RequestOptions({ headers: this.headers }))
+    .map(response => {
+      return response.json();
+    })
+    .catch(this.handleError)
+    .finally(() =>loading.dismiss())
+  }
+
+
 
 }

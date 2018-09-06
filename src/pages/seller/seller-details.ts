@@ -1,20 +1,20 @@
-import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
-import {Config, NavController} from 'ionic-angular';
-import {PopoverController, ToastController, NavParams, Nav, App, Events} from 'ionic-angular';
-import {Http} from "@angular/http";
-import { Response} from '@angular/http';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Config, NavController } from 'ionic-angular';
+import { PopoverController, ToastController, NavParams, Nav, App, Events } from 'ionic-angular';
+import { Http } from "@angular/http";
+import { Response } from '@angular/http';
 //import {FacebookService, LoginResponse, InitParams} from 'ngx-facebook';//facebook
 //import {UIParams, UIResponse} from 'ngx-facebook';
-import {Observable} from 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
-import {Geolocation} from '@ionic-native/geolocation';
-import {FavoriteListPage} from '../favorite-list/favorite-list';
-import {AboutPage} from '../about/about';
-import {ProductsPage} from '../products/products-page';
-import {ImageCropperComponent, CropperSettings, Bounds} from 'ng2-img-cropper';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {SellerService,CachedSellerService,SetGetUser,LocationDetails,ProductsService} from '../../providers/index';
+import { Geolocation } from '@ionic-native/geolocation';
+import { FavoriteListPage } from '../favorite-list/favorite-list';
+import { AboutPage } from '../about/about';
+import { ProductsPage } from '../products/products-page';
+import { ImageCropperComponent, CropperSettings, Bounds } from 'ng2-img-cropper';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { SellerService, CachedSellerService, SetGetUser, LocationDetails, ProductsService, ToastMessage } from '../../providers/index';
 import * as $ from 'jquery';
 import * as _ from 'lodash';
 
@@ -26,8 +26,8 @@ export class SellerDetailsPage implements OnInit {
   /* data variables start */
   @ViewChild('map') mapElement: ElementRef;
   @ViewChild(Nav) nav: Nav;
-    @ViewChild('outletAddform') outletAddform;
-   @ViewChild('cropper', undefined) cropper: ImageCropperComponent;
+  @ViewChild('outletAddform') outletAddform;
+  @ViewChild('cropper', undefined) cropper: ImageCropperComponent;
   properties: Array<any>;
   searchKey: string = "";
   viewMode: string = "list";
@@ -55,13 +55,13 @@ export class SellerDetailsPage implements OnInit {
   public pickMapLocation: boolean = true;
   isMobile: boolean = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   appMenuItems: Array<any> = [
-    {title: 'All Products', component: ProductsPage, icon: 'apps'},
-    {title: 'Wish list', component: FavoriteListPage, icon: 'heart'},
-    {title: 'My Profile', component: SellerDetailsPage, icon: 'contact'},
-    {title: 'My Products', component: ProductsPage, icon: 'logo-buffer'},
-    {title: 'Login', icon: 'contact'},
-    {title: 'Logout', icon: 'log-out'},
-    {title: 'About Selomart', component: AboutPage, icon: 'list-box'},
+    { title: 'All Products', component: ProductsPage, icon: 'apps' },
+    { title: 'Wish list', component: FavoriteListPage, icon: 'heart' },
+    { title: 'My Profile', component: SellerDetailsPage, icon: 'contact' },
+    { title: 'My Products', component: ProductsPage, icon: 'logo-buffer' },
+    { title: 'Login', icon: 'contact' },
+    { title: 'Logout', icon: 'log-out' },
+    { title: 'About Selomart', component: AboutPage, icon: 'list-box' },
   ];
   //cropper
   name: string;
@@ -88,7 +88,8 @@ export class SellerDetailsPage implements OnInit {
     //    private fb: FacebookService,
     public cachedSellerDetails: CachedSellerService,
     public events: Events,
-    private _app: App
+    private _app: App,
+    private _toastMsg: ToastMessage
   ) {
     this.addOutlet = false;
     this.outlet = {
@@ -107,7 +108,7 @@ export class SellerDetailsPage implements OnInit {
     } else if (this.calledFrom === 'editProduct') {
       this.product = this.navParams.get("product");
       // this.shopId = this.product.shopid;
-      this.shopId=this.product.seller.id;
+      this.shopId = this.product.seller.id;
     } else {
       this.shopId = this.navParams.get("shopId");
     }
@@ -144,21 +145,18 @@ export class SellerDetailsPage implements OnInit {
 
   /* data constructor oninit ends */
   getSellerDetailsFromDB() {
-    let toast = this.toastCtrl.create({
-      message: '', cssClass: 'mytoast', duration: 2000
-    });
     this.getSellerDetails()
       .subscribe(response => {
         if (response.success) {
           console.log("seller details")
           this.sellerData = response;
           var outletList = [];
-          _.each(this.sellerData.loggedInUserDetails.seller.outlets, function(outlet) {
+          _.each(this.sellerData.loggedInUserDetails.seller.outlets, function (outlet) {
             outletList.push({
               "id": outlet._id,
               "itemName": outlet.address,
               "mobile": outlet.mobile,
-               "workinghrs": outlet.workinghrs
+              "workinghrs": outlet.workinghrs
             });
           });
           this.outletsList = outletList;
@@ -175,8 +173,7 @@ export class SellerDetailsPage implements OnInit {
             SellerDetails.loggedInUserDetails.isSeller);
           console.log("in get this.isSeller ", this.isSeller);
         } else {
-          toast.data.message = "There was some problem while connectiong to server.Please try again.";
-          toast.present(toast);
+          this._toastMsg.showToastMessage("There was some problem while connectiong to server.Please try again.");
         }
       }, err => this.handleError(err))
   }
@@ -187,10 +184,6 @@ export class SellerDetailsPage implements OnInit {
 
   saveSellerDetails() {
     this.isFormSubmitted = true;
-    let toast = this.toastCtrl.create({
-      message: '', cssClass: 'mytoast', duration: 2000
-    });
-
     if (this.sellerForm.valid) {
       //addititonal values for seller  
       var sellerDataObj = new Object();
@@ -206,135 +199,22 @@ export class SellerDetailsPage implements OnInit {
       this.sellerService.saveSellerDetails(sellerDataObj)
         .subscribe(response => {
           if (response.success && response.recordsupdated > 0) {
-            toast.data.message = "Your details saved successfully.";
-            toast.present(toast);
+            this._toastMsg.showToastMessage("Your details saved successfully.");
             this.isSellerEditActivated = false;
             this.getSellerDetailsFromDB();
           } else {
-            toast.data.message = "There was some problem while registering user.Please try again.";
-            toast.present(toast);
+            this._toastMsg.showToastMessage("There was some problem while registering user.Please try again.");
           }
         }, err => this.handleError(err))
 
     } else {
-      toast.data.message = "Registration form is not valid.Please check details and try again.";
-      toast.present(toast);
+      this._toastMsg.showToastMessage("Registration form is not valid.Please check details and try again.");
     }
   }
 
   share(url: string) {
     console.log("in facebook share");
   }
-  // addCurrentLocation() {
-  //   this.geolocation.getCurrentPosition().then((data) => {
-  //     var geocoder = new google.maps.Geocoder();
-  //     var latlng = {
-  //       lat: data.coords.latitude,
-  //       lng: data.coords.longitude
-  //     };
-
-  //     geocoder.geocode({
-  //       'location': latlng
-  //     }, function(results, status) {
-  //       if (status === google.maps.GeocoderStatus.OK) {
-  //         if (results[0]) {
-
-  //           //find country name
-  //           for (var i = 0; i < results[0].address_components.length; i++) {
-  //             for (var b = 0; b < results[0].address_components[i].types.length; b++) {
-  //  //there are different types that might hold a city admin_area_lvl_1 usually does in come cases looking for sublocality type will be more appropriate
-  //               if (results[0].address_components[i].types[b] === "administrative_area_level_2") {
-  //               } else if (results[0].address_components[i].types[b] === "postal_code") {
-  //               }
-  //             }
-  //           }
-  //   } else {
-  //           window.alert('No results found');
-  //         }
-  //       } else {
-  //         window.alert('Geocoder failed due to: ' + status);
-  //       }
-  //     });
-  //     this.loadMap(data.coords.latitude + ',' + data.coords.longitude);
-  //   });
-  // }
-
-  // outletLocations(outlets) {
-  //   var locations = [];
-  //   outlets.filter((outlet, i) => {
-  //     locations.push([outlet['address'], Number(outlet['location'].split(',')[0]),
-  //     Number(outlet['location'].split(',')[1]), i + 1
-  //     ])
-  //   })
-  //   var mapPoint = new google.maps.Map(document.getElementById('outletlocs'), {
-  //     zoom: 10,
-  //     center: new google.maps.LatLng(locations[0][1], locations[0][2]),
-  //     mapTypeId: google.maps.MapTypeId.ROADMAP
-  //   });
-  //   var infowindow = new google.maps.InfoWindow();
-  //   var marker, i;
-  //   //from here
-  //   for (i = 0; i < locations.length; i++) {
-  //     marker = new google.maps.Marker({
-  //       position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-  //       map: mapPoint
-  //     });
-  //     var infowindow = new google.maps.InfoWindow({
-  //       content: locations[i][0],
-  //       positionMiddleOfWindow: true
-  //     });
-
-  //     google.maps.event.addListener(marker, 'click', () => {
-  //       infowindow.open(mapPoint, marker);
-  //       mapPoint.setCenter(marker.getPosition());
-  //     });
-  //     // show map, open infoBox 
-  //     google.maps.event.addListenerOnce(mapPoint, 'tilesloaded', () => {
-  //       infowindow.open(mapPoint, marker);
-  //     });
-  //   }
-  // }
-
-  // loadMap(sellerDetails) {
-  //   let latitude, longitude;
-  //   if (sellerDetails.shopid) {
-  //     latitude = sellerDetails.location ? sellerDetails.location.split(',')[0] : 0;
-  //     longitude = sellerDetails.location ? sellerDetails.location.split(',')[1] : 0;
-  //   } else {
-  //     this.sellerData['location'] = sellerDetails;
-  //     latitude = sellerDetails.split(',')[0];
-  //     longitude = sellerDetails.split(',')[1];
-  //     sellerDetails = this.sellerData;
-  //   }
-  //   this.geolocation.getCurrentPosition().then((position) => {
-  //     let latLng = new google.maps.LatLng(latitude, longitude);
-  //     let mapOptions = {
-  //       center: latLng,
-  //       zoom: 15,
-  //       mapTypeId: google.maps.MapTypeId.ROADMAP
-  //     }
-  //     this.map = new google.maps.Map(this.mapElement ? this.mapElement.nativeElement : '', mapOptions);
-  //     let marker = new google.maps.Marker({
-  //       map: this.map,
-  //       animation: google.maps.Animation.DROP,
-  //       position: this.map.getCenter()
-  //     });
-  //     let content = sellerDetails.shopname;
-  //     this.addInfoWindow(marker, content);
-  //   }, (err) => {
-  //     console.log(err);
-  //   });
-  //   this.sellerData = sellerDetails;
-  // }
-  // addInfoWindow(marker, content) {
-  //   let infoWindow = new google.maps.InfoWindow({
-  //     content: content
-  //   });
-  //   google.maps.event.addListener(marker, 'click', () => {
-  //     infoWindow.open(this.map, marker);
-  //   });
-  // }
-
 
   getSellerDetails() {
     let loggedInUser = this.userGetterSetter.getLoginUser();
@@ -345,14 +225,10 @@ export class SellerDetailsPage implements OnInit {
     }
   }
   public handleError(error: Response) {
-    let toast = this.toastCtrl.create({
-      message: '', cssClass: 'mytoast', duration: 2000
-    });
-    toast.data.message = "There was some problem while connecting to server.Please try again.";
-    toast.present(toast);
+    this._toastMsg.showToastMessage("There was some problem while connecting to server.Please try again.");
     console.error(error);
-     return Observable.throw('Server error');
-//    return Observable.throw(error.json().error || 'Server error');
+    return Observable.throw('Server error');
+    //    return Observable.throw(error.json().error || 'Server error');
   }
   sharebtnClick() {
     console.log('share click');
@@ -373,36 +249,14 @@ export class SellerDetailsPage implements OnInit {
     this.saveOutlet();
   }
   saveOutlet() {
-    var toast = this.toastCtrl.create({
-      message: '',
-      cssClass: 'mytoast',
-      duration: 2000
-    });
     this.productService.addShopOutlet(this.outlet).subscribe((response) => {
       if (response.success) {
-
-        toast.data.message = response.message;
-        toast.present(toast);
-        this.outletAddform.reset(); 
-        // this.isFormSubmitted = false;
-        //        this.outlet = {
-        //          location: '',
-        //          city: '',
-        //          address: '',
-        //          zip: '',
-        //          phone: '',
-        //          shopid: '',
-        //          working_hours: '10AM-8PM'
-        //        };
-              //  this.outletAddform.form.markAsPristine();
+        this._toastMsg.showToastMessage(response.message);
+        this.outletAddform.reset();
       } else {
-        toast.data.message = response.message;
-        toast.present(toast);
+        this._toastMsg.showToastMessage(response.message);
       }
     });
-
-    // this.outletAddform.$setPristine();
-    // debugger;
   }
 
   selectLocationChoices(event) {
@@ -441,9 +295,9 @@ export class SellerDetailsPage implements OnInit {
     this.addOutlet = this.addOutlet ? false : true;
     //var temArrOfLocation = outlet.location.split(",");
     var temArrOfLocation;
-    if(outlet.location) temArrOfLocation = outlet.location.split(",");
+    if (outlet.location) temArrOfLocation = outlet.location.split(",");
   }
- //image cropper
+  //image cropper
 
   cropped(bounds: Bounds) {
     this.croppedHeight = bounds.bottom - bounds.top;
@@ -455,7 +309,7 @@ export class SellerDetailsPage implements OnInit {
     var file: File = $event.target.files[0];
     var myReader: FileReader = new FileReader();
     var that = this;
-    myReader.onloadend = function(loadEvent: any) {
+    myReader.onloadend = function (loadEvent: any) {
       image.src = loadEvent.target.result;
       that.cropper.setImage(image);
 
@@ -491,5 +345,25 @@ export class SellerDetailsPage implements OnInit {
     } else {
       this._app.getRootNav().setRoot(page.component);
     }
+  }
+
+  likeSellerClick() {
+    let userDetails = this.userGetterSetter.getLoginUser();
+    if (userDetails.isAuthenticatedUser) {
+      this.likeSeller(userDetails.loggedInUserDetails.registrationid);
+    } else {
+      this._toastMsg.showToastMessage("Please login to like this seller.");
+    }
+  }
+  likeSeller(userId) {
+    this.sellerService.likeSeller(userId)
+      .subscribe((response) => {
+        if (response.success) {
+          this._toastMsg.showToastMessage(response.message);
+          // this.getProducts();
+        } else {
+          this._toastMsg.showToastMessage(response.message);
+        }
+      });
   }
 }//class ends here
