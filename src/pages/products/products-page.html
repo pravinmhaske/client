@@ -49,6 +49,12 @@
 </ion-header>
 <ion-content class="product-container col-xs-12 col-lg-12 col-sm-12 col-md-12">
   <div class="col-md-2 col-lg-2 desktop-only" style="padding-right: 0;">
+    <div class="advertise">Advertise with us.  <tooltip-content #advertiseInfo placement="top">
+more details about how advertize here.
+    </tooltip-content>
+    <a href="#" class="remove-decoration">
+      <i [tooltip]="advertiseInfo" class="glyphicon glyphicon-info-sign"></i>
+    </a></div>
     <div *ngIf="!filterApplied" style="padding: 5px;">
       <div *ngFor="let groups of categories;let i = index" class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
         <div id='filter-panel' class="panel panel-default">
