@@ -333,7 +333,7 @@ export class SellerDetailsPage implements OnInit {
       this.userGetterSetter.setLoginUser(LoggedInUser);
       this._app.getRootNav().setRoot(ProductsPage);
     } else if (page.title === "Login") {
-      this.events.publish('user:loginClicked');
+      this.events.publish('user:loginClicked',event);
       event.stopPropagation();
     } else if (page.title === "My Products") {
       let seller = this.userGetterSetter.getLoginUser();
