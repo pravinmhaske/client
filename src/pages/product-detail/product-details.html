@@ -165,7 +165,7 @@
             </div>
         </div>-->
     </div>
-    <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12" *ngIf="similarProducts && similarProducts.length">
+    <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12 similar-product" *ngIf="similarProducts && similarProducts.length">
         <div class="similar-product-title bold" style="margin-top: 10px;">You might also like</div>
         <div class="desktop-view">
             <ion-slides slides slidesPerView="6" #mySlider>
@@ -173,16 +173,22 @@
                     <div>
                       <a href="#">
                         <img src="{{item.imgurl}}" (click)="openProductDetails(item)" class="img-rounded img-thumbnail"
-                        style="height: 35vh;width:100%;" alt="Product Image" />
+                        style="height: 25vh;width:100%;" alt="Product Image" />
                       </a>
                     </div>
-                    <div style="font-size: 0.8em;">{{item.name}}</div>
+                    <div style="font-size: 0.8em;">{{item.name | titleCase}}</div>
                     <div class="separator clear-left">
-                        <p class="btn-add" style="font-size: 0.75em;">
-                            <a (click)="showSellerDetails(item.seller.id)" href="#" class="hidden-sm">By {{item.shopname |titleCase
-                            }}</a>
-                            <span>&#8377;{{item.finalprice}}</span>
-                        </p>
+                        <div class="btn-add" style="font-size: 0.75em;">
+                            By &nbsp;
+                            <a (click)="showSellerDetails(item.seller.id)" href="#" class="hidden-sm">
+                                {{item.seller.shopname | titleCase}}
+                            </a>
+                            <div>
+                                <b>&#8377;{{item.finalprice}}</b>
+                                <span class="actual-price">{{item.originalprice}}</span>
+                                <span class="offer">{{item.offer}}% off</span>
+                            </div>
+                        </div>
                     </div>
                 </ion-slide>
             </ion-slides>
@@ -192,16 +198,23 @@
                 <ion-slide *ngFor="let item of similarProducts">
                     <div>
                         <a href="#">
-                <img src="{{item.img}}" (click)="openProductDetails(item)" class="compressed-img img-rounded img-thumbnail"
+                <img src="{{item.imgurl}}" (click)="openProductDetails(item)" class="compressed-img img-rounded img-thumbnail"
                 style="height:75%;width:100%;" alt="Product Image" />
               </a>
                     </div>
-                    <div style="font-size: 0.8em;">{{item.name |titleCase}}</div>
+                    <div style="font-size: 0.8em;">{{item.name | titleCase}}</div>
                     <div class="separator clear-left">
-                        <p class="btn-add" style="font-size: 0.75em;">
-                            <a (click)="showSellerDetails(item.seller.id)" href="#" class="hidden-sm">By {{item.shopname |titleCase}}</a>
-                            <span>&#8377;{{item.finalprice}}</span>
-                        </p>
+                        <div class="btn-add" style="font-size: 0.75em;">
+                            By &nbsp;
+                            <a (click)="showSellerDetails(item.seller.id)" href="#" class="hidden-sm">
+                                {{item.seller.shopname | titleCase}}
+                            </a>
+                            <div>
+                                <b>&#8377;{{item.finalprice}}</b>
+                                <span class="actual-price">{{item.originalprice}}</span>
+                                <span class="offer">{{item.offer}}% off</span>
+                            </div>
+                        </div>
                     </div>
                 </ion-slide>
             </ion-slides>
