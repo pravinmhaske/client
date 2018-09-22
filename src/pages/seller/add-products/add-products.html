@@ -144,8 +144,13 @@
         </div>
         <div class="form-group">
 
-            <div class="col-md-6">
-                <label for="">Image Upload </label>
+            <div class="col-md-6 margin-top-2">
+                    <div *ngIf="(product!==undefined); else newImage">
+                            <label >Upload New Image </label>
+                        </div>
+                        <ng-template #newImage> <label>Image Upload </label></ng-template>
+                <!-- <label *ngIf="(product!==undefined)" for="">Upload New Image </label>
+                <label *ngIf="(product===undefined)" for="">Image Upload </label> -->
                 <div>
                     <ion-card-content>
                         <div class="form-group" >
@@ -160,14 +165,16 @@
                 </small> -->
                 <!--<input type="file" accept="image/*" formControlName="prodImg"  (change)="handleInputChange($event,myForm.controls.prodImg)" />-->
             </div>
-            <div class="col-md-6" style="margin-top:50px;">
+            <!-- {{product.imgurl}} -->
+            <div class="col-md-6" style="margin-top:9%;">
                 <span class="result" *ngIf="data1 && data1.image">
                     <img [src]="data1.image" style="min-height:200px;max-height:350px;min-width:200px;max-width:350px;">
                     <!-- <img [src]="data1.image"
                             [width]="croppedWidth"
                             [height]="croppedHeight"> -->
                 </span>
-                <img *ngIf="(product!==undefined) && !isProductImageUploaded" src="{{product.img}}" style='width:100%;height:100%' alt="">
+                <img  *ngIf="(product!==undefined) && !isProductImageUploaded" src="{{product.imgurl}}" style='width:70%;height:70%' alt="">
+                <!-- <img *ngIf="(product!==undefined)" src="{{product.imgurl}}" style='width:100%;height:100%' alt=""> -->
 
             </div>
 
