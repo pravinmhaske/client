@@ -717,3 +717,21 @@ padding:0px
         color:darkgreen;
         font-weight: bold;
       }
+
+      @media (min-width: 481px) and (max-width: 767px) {
+  
+        //CSS
+        .remove-decoration.availability{
+            text-align: left !important;
+        }
+        
+      }
+
+      @media (min-width: 320px) and (max-width: 480px) {
+  
+        //CSS
+        .remove-decoration.availability{
+            float: left !important;
+        }
+        
+      }

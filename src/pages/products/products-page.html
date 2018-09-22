@@ -242,9 +242,9 @@ more details about how advertize here.
                       <!-- <h5 (click)="showSellerDetails(product.shopid)"  class="sellerspage-ellipsis pull-left float-right margin-zero"><a href="#"  [tooltip]="sellerInfo1"> {{product.seller.shopname | titleCase}}</a></h5> -->
 
                       <div class="meta inline-block pull-right" style="margin-top: -10px;">
-                        <span>&#8377; {{product.finalprice}}
+                        <span>&#8377; {{product.finalprice | number : '1.0-2'}}
                           <h6 class="inline-block">
-                            <span style="text-decoration: line-through; color: gray">&#8377;{{product.originalprice}}</span>
+                            <span style="text-decoration: line-through; color: gray">&#8377;{{product.originalprice | number : '1.2-2'}}</span>
                             <span>{{product.offer}}% off</span>
                           </h6>
                         </span>
@@ -288,7 +288,7 @@ more details about how advertize here.
                             class="remove-decoration float-right">
                              Edit<i class="glyphicon glyphicon-info-sign"></i>
                            </a> 
-                            <a (click)="openProductDetails(product)" href="javascript:void(0)" class="remove-decoration float-right">
+                            <a (click)="openProductDetails(product)" href="javascript:void(0)" class="remove-decoration availability float-right">
                               <i class="glyphicon glyphicon-bell"></i>AVAILABLE AT ({{product.outlets.length}})
                             </a>
                             <!-- <tooltip-content #editProduct placement="right">

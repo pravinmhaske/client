@@ -9,8 +9,8 @@ export const AppConfig: IAppConfig = {
     productsList: 'products-list/'
   },
   endpoints: {
-     localhost: 'http://localhost:3000/',
-    // localhost: 'https://www.selomart.com/',
+    //  localhost: 'http://localhost:3000/',
+    localhost: 'https://www.selomart.com/',
     productsList: 'get-products',
     productDetails: 'get-prod-details',
     categories: 'get-categories-data',
