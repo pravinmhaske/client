@@ -23,7 +23,7 @@
 			<div class="subcat-input col-sm-4 col-xs-4"
 			*ngFor="let subCategory of category.subcategories"
 			(click)="selectSubCat(category.catname, subCategory)">
-				<img src="{{subCategory.icon}}" height="75px" width="auto" />
+				<img src="{{subCategory.imgurl}}" height="75px" width="auto" />
 				<div>{{subCategory.name}}</div>
 			</div>
 		</div>

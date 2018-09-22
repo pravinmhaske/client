@@ -83,7 +83,11 @@ export class ProductDetailsPage implements OnInit {
     getProductDetails(productid: any) {
         this.productService.getProdDetails(productid).subscribe(response => {
             this.product = response.productsData[0];
-            console.log(this.product);
+            let prodid = this.product._id;
+            this.productService.findSimilar({category: this.product.category, subcategory: this.product.subcategory})
+                .subscribe(response => {
+                    this.similarProducts = response.productsList.filter(i => { return i._id != prodid; });
+                });
             // let prodid = this.product.prodid;
             // this.productService.findSimilar({catId: this.navParams.data.product.catId, subCatId: this.navParams.data.product.subcatId})
             //     .subscribe(response => {
@@ -221,11 +225,11 @@ export class ProductDetailsPage implements OnInit {
     }
 
     openProductDetails(productObj) {
-        let prodDetails:any = this.productService.getProdDetails(
-        {prodid: productObj.productid, outlet_ids: productObj.outlet_ids}
-        ).subscribe((response) => {
-            let product = response;
-            this.navCtrl.push(ProductDetailsPage, {product, specifications: this.specifications});
+        this.product = productObj;
+        var prodid = productObj._id;
+        this.productService.findSimilar({category: this.product.category, subcategory: this.product.subcategory})
+        .subscribe(response => {
+            this.similarProducts = response.productsList.filter(i => { return i._id != prodid; });
         });
     }
     openPage(page,event) {

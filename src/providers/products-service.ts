@@ -125,15 +125,12 @@ export class ProductsService {
   }
 
   findSimilar(data: any): Observable<any> {
-    let loading = this.loadingCtrl.create();
-    loading.present();
     return this.http.post(this.localhost+this.endpoints.similarProducts, data,
     new RequestOptions( {headers: this.headers} ))
     .map(response => {
       return response.json();
     })
-    .catch(this.handleError)
-    .finally(() =>loading.dismiss());
+    .catch(this.handleError);
   }
   addProductToFav(data) {
     return this.http.post(this.localhost + this.endpoints.addToFav, data,

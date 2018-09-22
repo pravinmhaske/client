@@ -107,10 +107,14 @@
   margin-bottom: 15px;
   border-bottom: 1px solid lightgrey;
 }
-.similar-product-title {
-  font-size: 1.5em;
-  font-weight: bold;
-  margin: 0 10px;
+.similar-product {
+  background: #f9f6f6;
+  margin-bottom: 25px;
+  .similar-product-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 0 10px;
+  }
 }
 .rating-block {
   display: inline-block;
