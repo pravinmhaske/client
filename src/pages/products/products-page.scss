@@ -711,3 +711,30 @@ padding:0px
     .panel-body{
         padding: 5px 5px 10px;
     }
+
+    .advertise{
+        padding: 7px 10px 5px;
+        color:darkgreen;
+        font-weight: bold;
+      }
+
+      @media (min-width: 481px) and (max-width: 767px) {
+  
+        //CSS
+        .remove-decoration.availability{
+            text-align: left !important;
+        }
+        
+      }
+
+      @media (min-width: 320px) and (max-width: 480px) {
+  
+        //CSS
+        .remove-decoration.availability{
+            float: left !important;
+        }
+        .no-product {
+            font-size:2em !important;
+          }
+        
+      }

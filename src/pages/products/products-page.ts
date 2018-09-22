@@ -257,6 +257,8 @@ export class ProductsPage implements OnInit {
   }
   openProductDetails(productObj) {
     this.navCtrl.push(ProductDetailsPage,{productid:productObj._id});
+    // this.navCtrl.pop(ProductDetailsPage,{productid:productObj._id});
+    
 
     // let prodDetails: any = this.productService.getProdDetails(
     //   { prodid: productObj.prodid, outlet_ids: productObj.outlet_ids }
