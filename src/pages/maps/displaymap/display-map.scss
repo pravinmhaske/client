@@ -59,3 +59,13 @@ color:#009900;
     /* border-color: #b2b2b2; */
     background: dimgray;
 }
+#sellerOutlets{
+    height:350px;
+    width: 100%;
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
+    #sellerOutlets{
+        height:250px;
+    }
+    }

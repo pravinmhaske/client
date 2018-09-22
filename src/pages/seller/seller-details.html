@@ -224,12 +224,12 @@
                     <div class="panel panel-default">
                       <div class="panel-body">
                         <div class="row">
-                          <div class="col-md-3 col-xs-8 col-lg-3 col-sm-6" style="padding: 0;">
+                          <div class="col-md-3 col-xs-4 col-lg-3 col-sm-6 logo-container" style="padding: 0;">
                             <!--<img  [src]="(sellerData?.img}!= null) ? (sellerData?.img) : myImgUrl" src="{{sellerData?.img}}" class="img-responsive">-->
                             <img [attr.src]="sellerData?.imgbanner ? sellerData.imgbanner : myImgUrl" class="img-responsive seller-logo-img">
 
                           </div>
-                          <div class="col-md-4 col-xs-4 col-lg-4 col-sm-6">
+                          <div class="col-md-4 col-xs-8 col-lg-4 col-sm-6 seller-info-container">
                             <h5 class="green-color">{{sellerData?.loggedInUserDetails.seller.shopname |titleCase}}</h5>
                             <p *ngIf="sellerData?.shopowner!==''">by {{sellerData?.loggedInUserDetails.seller.shopowner |titleCase}}
                             </p>
@@ -339,7 +339,13 @@
                       </div>
                     </div>
                   </div>
-                  <div *ngIf="outletsList">Total outlets Available : {{outletsList.length}}</div>
+                  <div *ngIf="outletsList" class="col-md-12 total-outlets" >
+                    <div class="alert alert-success" role="alert">
+                      <div >Total Branches Available : {{outletsList.length}}</div>
+                    </div>
+                  </div>
+                 
+                  <!-- <div *ngIf="outletsList">Total outlets Available : {{outletsList.length}}</div> -->
                   <div class="col-md-12" *ngFor="let outlet of sellerData?.loggedInUserDetails.seller.outlets">
                     <div class="panel panel-default">
                       <div style="padding: 8px;">

@@ -14,7 +14,7 @@
             <ion-icon class="search-bar-icon" name="pin"></ion-icon>
         </button>
     </div> -->
-    <div *ngIf="outletsData[0].location" id="sellerOutlets" style="height: 250px; width: 100%;"></div>
+    <div *ngIf="outletsData[0].location" id="sellerOutlets" ></div>
     <div *ngIf="!outletsData[0].location && outletsData.length !== 1">Shop Location is not available</div>
     <div *ngIf="!outletsData[0].location && outletsData.length === 1">
         {{outletsData[0].address}}, {{outletsData[0].city}}- {{outletsData[0].zip}}
