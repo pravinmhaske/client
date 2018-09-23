@@ -287,20 +287,24 @@ export class ProductsPage implements OnInit {
   }
 
   selectCatGroup(selectedGroup) {
-    let modal = this.modalCtrl.create(CategoryModalPage, {
-      'categorisedData': selectedGroup.categories, 
-      'groupname': selectedGroup.groupname
-    });
-    modal.onDidDismiss(data => {
-      if(data && data.catname && !data.subcat) {
-        this.productType.catName = data.catname;
-        this.onCategorySelected(data); 
-      } else if(data && data.catname && data.subcat) {
-        this.productType.catName = data.catname;
-        this.selectSubcategories(data.subcat);
-      }
-    });
-    modal.present();
+    if(selectedGroup.categories && selectedGroup.categories.length) {
+      let modal = this.modalCtrl.create(CategoryModalPage, {
+        'categorisedData': selectedGroup.categories, 
+        'groupname': selectedGroup.groupname
+      });
+      modal.onDidDismiss(data => {
+        if(data && data.catname && !data.subcat) {
+          this.productType.catName = data.catname;
+          this.onCategorySelected(data); 
+        } else if(data && data.catname && data.subcat) {
+          this.productType.catName = data.catname;
+          this.selectSubcategories(data.subcat);
+        }
+      });
+      modal.present();
+    } else {
+      alert("No data available");
+    }
   }
   /*
   selectCategory(selectedCtgryId: number) {

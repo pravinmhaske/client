@@ -322,11 +322,10 @@ more details about how advertize here.
 <ion-footer align-title="left" class="bar-positive expand-footer col-sm-12 col-xs-12">
   <ion-row class="footer-row" *ngIf="!filterApplied">
     <ion-col *ngFor="let group of categories" (click)="selectCatGroup(group)">
-      <ion-icon *ngIf="group.groupname==='Style'" name="cart"></ion-icon>
-      <ion-icon *ngIf="group.groupname==='Electronics'" name="easel"></ion-icon>
-      <ion-icon *ngIf="group.groupname==='Home'" name="home"></ion-icon>
-      <ion-icon *ngIf="group.groupname==='Sports'" name="ios-game-controller-b"></ion-icon>
-      <ion-icon *ngIf="group.groupname==='Food'" name="spoon"></ion-icon>
+      <ion-icon *ngIf="group.groupname==='Style'" name="shirt"></ion-icon>
+      <ion-icon *ngIf="group.groupname==='Electronics'" name="phone-portrait"></ion-icon>
+      <ion-icon *ngIf="group.groupname==='Home'" name="nuclear"></ion-icon>
+      <ion-icon *ngIf="group.groupname==='Hotel'" name="cafe"></ion-icon>
       <ion-icon *ngIf="group.groupname==='Services'" name="bug"></ion-icon>
       <header>{{group.groupname}}</header>
     </ion-col>

@@ -112,36 +112,36 @@ console.log("outletsData =",this.outletsData);
         });
         mapPoint.setCenter(marker.getPosition());
         this.markers.push(marker);
-        mapPoint.addListener('click', event=> {
-            for (var i = 0; i < this.markers.length; i++) {
-                this.markers[i].setMap(null);
-            }
-            this.markers = [];
-            marker = new google.maps.Marker({
-                position: event.latLng,
-                map: mapPoint
-            });
-            this.markers.push(marker);
-            mapPoint.setCenter(marker.getPosition());
-            google.maps.event.addListener(marker, "mouseup", e=> {
-                var infoWindow = new google.maps.InfoWindow({
-                    positionMiddleOfWindow: true,
-                    content:'<input type="text" id="outletAddress" placeholder="Complete address"><br/>'+
-                        '<input type="text" id="outletCity" placeholder="City"><br/>'+
-                        '<input type="number" id="outletZip" placeholder="Zip/Pin code">'+
-                        '<div id="saveOutlet" style="border:1px solid black;padding:2px;">Save</div>'
-                });
-                outletObj.location = e.latLng.lat()+','+e.latLng.lng();
-                setTimeout(function() {
-                    $("#saveOutlet").click(function() {
-                        outletObj.address = document.getElementById('outletAddress')['value'];
-                        outletObj.city = document.getElementById('outletCity')['value'];
-                        outletObj.zip = document.getElementById('outletZip')['value'];
-                    });
-                }, 0);
-                infoWindow.open(mapPoint, marker);
-           });
-        });
+        // mapPoint.addListener('click', event=> {
+        //     for (var i = 0; i < this.markers.length; i++) {
+        //         this.markers[i].setMap(null);
+        //     }
+        //     this.markers = [];
+        //     marker = new google.maps.Marker({
+        //         position: event.latLng,
+        //         map: mapPoint
+        //     });
+        //     this.markers.push(marker);
+        //     mapPoint.setCenter(marker.getPosition());
+        //     google.maps.event.addListener(marker, "mouseup", e=> {
+        //         var infoWindow = new google.maps.InfoWindow({
+        //             positionMiddleOfWindow: true,
+        //             content:'<input type="text" id="outletAddress" placeholder="Complete address"><br/>'+
+        //                 '<input type="text" id="outletCity" placeholder="City"><br/>'+
+        //                 '<input type="number" id="outletZip" placeholder="Zip/Pin code">'+
+        //                 '<div id="saveOutlet" style="border:1px solid black;padding:2px;">Save</div>'
+        //         });
+        //         outletObj.location = e.latLng.lat()+','+e.latLng.lng();
+        //         setTimeout(function() {
+        //             $("#saveOutlet").click(function() {
+        //                 outletObj.address = document.getElementById('outletAddress')['value'];
+        //                 outletObj.city = document.getElementById('outletCity')['value'];
+        //                 outletObj.zip = document.getElementById('outletZip')['value'];
+        //             });
+        //         }, 0);
+        //         infoWindow.open(mapPoint, marker);
+        //    });
+        // });
         // google.maps.event.addListener(marker, 'click', () => {
         //     let infowindow = new google.maps.InfoWindow({
         //         content: address,
